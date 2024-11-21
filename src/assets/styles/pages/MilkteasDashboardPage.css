@@ -1,0 +1,54 @@
+/* slick */
+.add-product-modal .slick-dots,
+.update-product-modal .slick-dots {
+    bottom: 0;
+    inset-inline-end: unset;
+    width: 100%;
+    margin: 14px 0 0;
+}
+
+.add-product-modal .slick-dots li button,
+.update-product-modal .slick-dots li button {
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    background-color: #000;
+}
+
+.add-product-modal .slick-dots li.slick-active,
+.update-product-modal .slick-dots li.slick-active {
+    width: 16px;
+}
+
+.add-product-modal .slick-dots li button::before,
+.update-product-modal .slick-dots li button::before {
+    font-size: unset;
+}
+
+.add-product-modal .slick-dots li.slick-active button,
+.update-product-modal .slick-dots li.slick-active button {
+    transform: scale(1.5);
+    background-color: #ffbe33;
+}
+
+/* Overwrite antd css */
+.product-table .ant-image-mask {
+    color: transparent;
+    background-color: transparent;
+}
+
+/* Extra reusable css */
+.product-form-label {
+    width: 100%;
+    padding-bottom: 8px;
+    display: block;
+    text-align: left;
+}
+
+.dashboard-order-item p {
+    margin: 4px 0;
+}
+
+.dashboard-order-item > div {
+    margin: 10px 0;
+}

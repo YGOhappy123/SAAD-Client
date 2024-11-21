@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
+.error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.error-page .oops-title {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-family: 'Nunito', sans-serif;
+  font-size: 10rem;
+  font-weight: 800;
+  user-select: none;
+}
+
+.error-page .back-btn {
+  height: unset;
+  border: 2px solid transparent;
+  border-radius: 0.25rem;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background-origin: border-box;
+  color: white;
+}
+
+.error-page .back-btn:hover {
+  border-color: #dc2743;
+  background: transparent;
+  color: #dc2743;
+}

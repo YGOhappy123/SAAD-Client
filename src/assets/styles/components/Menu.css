@@ -1,0 +1,251 @@
+.menu {
+    padding: 90px 0;
+}
+
+.menu .heading {
+    margin: 0;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+}
+
+.menu .filters-menu {
+    max-width: 80%;
+    padding-left: 0;
+    margin: 45px auto 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 4px;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+
+.filters-menu .filters-item {
+    padding: 7px 25px;
+    border-radius: 25px;
+    font-size: 1rem;
+    text-transform: capitalize;
+    text-align: center;
+    cursor: pointer;
+}
+
+.filters-menu .filters-item.active {
+    background-color: #222831;
+    color: #fff;
+}
+
+.menu .filter-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-content .menu-card-wrapper {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+
+.menu-card-wrapper .menu-card {
+    margin: 25px 15px 0;
+    background: linear-gradient(to bottom, #f1f2f3 25px, #222831 25px);
+    border-radius: 15px;
+    overflow-x: clip;
+}
+
+.menu-card .image-wrapper {
+    height: 245px;
+    padding: 25px;
+    background: #f1f2f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px 15px 0 45px;
+}
+
+.menu-card .image-wrapper:hover .image {
+    transform: scale(1.1);
+}
+
+.menu-card .image {
+    max-width: 100%;
+    height: 145px;
+    max-height: 100%;
+    object-fit: cover;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.menu-card .description {
+    padding: 25px;
+    min-height: 207px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.description .name {
+    margin: 0 0 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.description p {
+    flex: 1;
+    margin: 0 0 16px;
+    font-size: 1rem;
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.description .price {
+    margin: 8px 0 10px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.menu .view-more-btn {
+    height: unset !important;
+    padding: 9px 55px !important;
+    text-transform: capitalize;
+    transition: all 0.3s;
+}
+
+.atcm .ant-modal-content {
+    background-color: #fbfbfb !important;
+}
+
+.atcm-title {
+    margin-top: 0;
+}
+
+.atcm-product {
+    margin-bottom: 24px;
+    display: flex;
+    gap: 24px;
+}
+
+.atcm-img-wrapper {
+    width: 180px;
+    height: 180px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background-image: url('/product-active-img-bg.png');
+    background-size: contain;
+}
+
+.atcm-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.atcm-product-info {
+    flex: 1;
+}
+
+.atcm-product-info .title {
+    margin: 0 0 12px;
+    font-weight: 600;
+}
+
+.atcm-product-info .desc {
+    margin: 0 0 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.atcm-quantity-and-total {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.atcm-quantity-and-total .quantity button,
+.atcm-quantity-and-total .quantity > span {
+    width: 30px;
+    padding: 0;
+    border: 1px solid black;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.atcm-quantity-and-total .quantity > span {
+    width: 40px;
+    border-left: none;
+    border-right: none;
+}
+
+.atcm-product-info .total {
+    height: 32px;
+    padding: 2px 30px;
+    color: #ffffff;
+    font-size: 1rem;
+    background: #d8b979;
+    line-height: 32px;
+    border: none;
+    border-radius: 30px;
+    display: inline-block;
+    box-shadow: unset;
+}
+
+.atcm-form {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.atcm-form .title {
+    padding: 0 20px;
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #fbfbfb;
+}
+
+.atcm-form .values-group {
+    padding: 0 20px;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.atcm-form .values-group .item {
+    width: 50%;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.atcm-form .values-group .item.wfull {
+    width: 100%;
+}
+
+.atcm-form .values-group + .title {
+    margin-top: 12px;
+}
+
+.atcm-form .values-group .topping-price {
+    margin-left: auto;
+    font-weight: 500;
+    color: #841f27;
+}
+
+.atcm-form .values-group input[type='radio'],
+.atcm-form .values-group input[type='checkbox'] {
+    accent-color: #ffbe33;
+}

@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+/* reset css */
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+}
+
+@media only screen and (min-width: 769px) {
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #fcfcfc;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    background-color: #fcfcfc;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(138, 135, 135, 0.8);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(138, 135, 135);
+  }
+}

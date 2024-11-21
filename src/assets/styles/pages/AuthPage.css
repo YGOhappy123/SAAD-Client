@@ -1,0 +1,91 @@
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('/auth-background.jpg') no-repeat bottom left;
+  background-size: cover;
+}
+
+.auth-page .abs-btns {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+}
+
+.auth-page .auth-form {
+  width: 500px;
+  padding: 24px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.53);
+  box-shadow: 0px 8px 32px rgba(255, 190, 51, 0.7);
+  backdrop-filter: blur(1px);
+}
+
+.auth-form .text-center {
+  text-align: center;
+}
+
+.auth-form .submit-btn {
+  margin-top: 8px;
+}
+
+.auth-form strong {
+  cursor: pointer;
+}
+
+.auth-form .forgot-password {
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.2s linear;
+}
+
+.auth-form .forgot-password:hover {
+  text-decoration: underline;
+}
+
+.google-auth-btn {
+  position: relative;
+  height: unset !important;
+  margin-block: 14px 8px !important;
+  border-color: #000 !important;
+  background: #000;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
+.google-auth-btn:hover {
+  color: #fff !important;
+}
+
+.google-auth-btn > img {
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 9px;
+  background: #fff;
+  border-radius: 100px;
+  object-fit: cover;
+}
+
+.google-auth-btn:hover {
+  background-color: #302a2a;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.88);
+  transition: background-color 5000s ease-in-out 0s;
+}

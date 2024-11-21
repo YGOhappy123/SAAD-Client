@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+
+.profile-page .container-wrapper {
+    padding: 90px 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-page .container {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    align-items: flex-start;
+    gap: 48px;
+}
+
+.update-avatar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.update-account-form .form-heading,
+.update-avatar-wrapper .heading,
+.my-orders .heading {
+    margin: 0 0 24px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    align-self: flex-start;
+}
+
+.update-account-form .update-account-btn,
+.update-avatar-wrapper .change-avatar-btn {
+    height: unset !important;
+    padding: 12px 0 !important;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: all 0.3s;
+}
+
+.update-avatar-wrapper .avatar-uploader {
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.update-avatar-wrapper .ant-upload-select {
+    position: relative;
+    width: 202px !important;
+    height: 202px !important;
+    margin: 0 !important;
+}
+
+.update-avatar-wrapper .avatar-uploader .upload-icon {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 20;
+}
+
+.update-avatar-wrapper .ant-avatar-image {
+    width: 190px !important;
+    height: 190px !important;
+}
+
+.empty-order {
+    height: 450px;
+    padding: 45px 30px;
+    border-radius: 6px;
+    background: url('/empty-order-bg.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.empty-order .empty-order-discover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.empty-order .empty-order-discover h2,
+.empty-order .empty-order-discover h3 {
+    margin: 0;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.75rem;
+    text-transform: uppercase;
+}
+
+.empty-order .empty-order-discover .start-order-btn {
+    height: unset !important;
+    padding: 10px 32px;
+    margin-top: 16px;
+    border-width: 2px;
+    color: #475c01;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.empty-order-discover .start-order-btn:hover {
+    border-color: #475c01;
+}
+
+.my-orders .order-filter {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.my-orders .order-filter .status-options {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+}
+
+.my-orders .order-filter .status-option-item {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    cursor: pointer;
+    border: 2px solid #222831;
+    color: #222831;
+}
+
+.my-orders .order-filter .status-option-item:hover {
+    background: rgba(34, 40, 49, 0.1);
+}
+
+.my-orders .order-filter .status-option-item.active {
+    background-color: #222831;
+    color: #fff;
+}
+
+.my-orders .sort-options .ant-select-selector {
+    height: 40px;
+    border: 2px solid #222831 !important;
+    border-radius: 4px;
+}
+
+.my-orders .sort-options .ant-select-selection-item {
+    font-size: 0.9rem;
+}
+
+.my-orders .order-list .table-order-status {
+    font-weight: 500;
+}
+
+.my-orders .order-list .table-order-status.Pending {
+    color: #ffbe33;
+}
+
+.my-orders .order-list .table-order-status.Accepted {
+    color: #007bff;
+}
+
+.my-orders .order-list .table-order-status.Done {
+    color: #28a745;
+}
+
+.my-orders .order-list .table-order-status.Rejected {
+    color: #dc3545;
+}
+
+.order-details {
+    display: flex;
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-details .bold-text {
+    font-weight: 500;
+}
+
+.order-details .rejection-reason {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-details .rejection-reason .reason {
+    max-width: 600px;
+    text-align: justify;
+}
+
+.order-details .order-detail-item {
+    display: flex;
+    gap: 20px;
+}
+
+.order-details-rating-btn {
+    background-color: #1a1a1a;
+}
+
+.order-details-rating-btn:not([disabled]):hover {
+    background-color: #3c3c3c !important;
+}
+
+.product-card-desc {
+    height: 70px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.update-account-form .ant-select-selector {
+    border-radius: 4px !important;
+}

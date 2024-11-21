@@ -1,0 +1,230 @@
+.home-page section {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+}
+
+/* Banner */
+.home-page .banner {
+  position: relative;
+  padding: 45px 0 75px;
+}
+
+.banner .banner-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner .carousel .slick-dots {
+  inset-inline-end: unset;
+  width: fit-content;
+  margin: 14px 0 0;
+}
+
+.banner .carousel .slick-dots li button {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+}
+
+.banner .carousel .slick-dots li.slick-active {
+  width: 16px;
+}
+
+.banner .carousel .slick-dots li button::before {
+  font-size: unset;
+}
+
+.banner .carousel .slick-dots li.slick-active button {
+  transform: scale(1.5);
+  background-color: #ffbe33;
+}
+
+.banner .carousel-item {
+  height: max(calc(100vh - 190px), 300px);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.banner .carousel-item .header {
+  margin: 0 0 15px 0;
+  font-family: 'Dancing Script', cursive;
+  font-size: 56px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.banner .carousel-item .description {
+  width: 50%;
+  margin-bottom: 16px;
+}
+
+.banner .order-btn {
+  min-width: 160px;
+  height: unset !important;
+  padding: 9px 25px !important;
+  margin-top: 10px;
+  text-transform: capitalize;
+  transition: all 0.3s;
+}
+
+/* Sale off */
+.home-page .sale-off {
+  padding: 90px 0;
+}
+
+.sale-off .daily-promotions {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.daily-promotions .promotion-card {
+  flex: 1;
+  max-width: 60%;
+  padding: 20px 15px;
+  border-radius: 5px;
+  background-color: #222831;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.promotion-card .image {
+  width: 175px;
+  height: 175px;
+  border: 5px solid #ffbe33;
+  border-radius: 100%;
+  overflow: hidden;
+  transition: all 0.1 0.5s;
+}
+
+.promotion-card .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promotion-card .description {
+  font-family: 'Dancing Script', cursive;
+  color: #fff;
+}
+
+.promotion-card .description .title {
+  margin: 0;
+  font-size: 2rem;
+  text-transform: capitalize;
+}
+
+.promotion-card .description .sale-off-tag {
+  margin: 10px 0 0;
+  font-size: 1rem;
+}
+
+.promotion-card .description .sale-off-tag span {
+  font-size: 1.5rem;
+}
+
+.promotion-card .order-btn {
+  height: unset !important;
+  padding: 9px 30px !important;
+  margin-top: 20px;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+/* Menu */
+.home-page .menu {
+  padding-top: 0;
+}
+
+/* Feedback */
+.home-page .feedback {
+  padding: 90px 0;
+}
+
+.feedback .heading {
+  margin: 0 0 25px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.feedback .item {
+  padding: 15px;
+}
+
+.feedback .item .feedback-content {
+  padding: 25px 25px 15px 25px;
+  border-radius: 5px;
+  background-color: #222831;
+  color: #fff;
+}
+
+.feedback .feedback-content p {
+  min-height: 70px;
+  margin: 0 0 10px;
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.feedback .feedback-content .author-name {
+  margin: 15px 0 5px 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.feedback .feedback-content .feedback-date {
+  margin: 0 0 10px;
+  font-size: 15px;
+  display: inline-block;
+}
+
+.feedback .feedback-author {
+  position: relative;
+  width: 115px;
+  height: 115px;
+  margin-top: 30px;
+}
+
+.feedback .feedback-author::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #ffbe33;
+  transform: rotate(45deg) translateX(-50%);
+  z-index: -1;
+}
+
+.feedback .feedback-author img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 5px solid #ffbe33;
+  border-radius: 100%;
+}
+
+.feedback .btns {
+  margin-top: 45px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

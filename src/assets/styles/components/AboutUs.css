@@ -1,0 +1,51 @@
+.about-us {
+  padding: 90px 0;
+  background: #222831 !important;
+}
+
+.about-us .container {
+  display: flex;
+  align-items: center;
+}
+
+.about-us .image-wrapper {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.about-us .image-wrapper img {
+  width: 100%;
+  max-width: 445px;
+}
+
+.about-us .story-wrapper {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 0 15px;
+  color: #fff;
+}
+
+.story-wrapper .heading {
+  margin: 0;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.5rem;
+  text-transform: capitalize;
+}
+
+.story-wrapper .story {
+  margin: 15px 0;
+  font-size: 1rem;
+  line-height: 24px;
+  text-align: justify;
+}
+
+.story-wrapper .read-more-btn {
+  height: unset !important;
+  padding: 9px 45px !important;
+  margin-top: 15px;
+  text-transform: capitalize;
+  transition: all 0.3s;
+}
