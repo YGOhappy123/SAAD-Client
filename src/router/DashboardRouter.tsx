@@ -4,7 +4,6 @@ import {
     CustomersDashboardPage,
     MilkteasDashboardPage,
     OrdersDashboardPage,
-    VouchersDashboardPage,
     CategoriesDashboardPage,
     StatisticsDashboardPage,
     ToppingsDashboardPage,
@@ -39,10 +38,6 @@ const dashboardRouter = [
             {
                 path: 'toppings',
                 element: <ToppingsDashboardPage />
-            },
-            {
-                path: 'vouchers',
-                element: <VouchersDashboardPage />
             },
             {
                 path: 'orders',

@@ -37,17 +37,6 @@ export interface ITopping {
 
 export type IProduct = IMilktea | ITopping
 
-export interface IVoucher {
-    voucherId: string
-    code: string
-    discountType: 'Percent' | 'Fixed Amount'
-    discountAmount: number
-    totalUsageLimit: number
-    expiredDate?: string
-    createdAt: string
-    isHidden: boolean
-}
-
 export interface ICartItem {
     cartItemId: number
     userId?: number

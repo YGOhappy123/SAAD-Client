@@ -50,8 +50,7 @@ export default function UsersDashboardPage() {
             [t('note')]: rawOrder.note ?? t('none'),
             [t('staff in charge')]: rawOrder.staff ? `${rawOrder.staff.lastName} ${rawOrder.staff.firstName}` : t('not updated yet'),
             [t('status')]: t(rawOrder.status.toLocaleLowerCase()),
-            [t('rejection reason')]: rawOrder.rejectionReason,
-            [t('applied a voucher') + '?']: rawOrder.voucherId ? t('yes') : t('no')
+            [t('rejection reason')]: rawOrder.rejectionReason
         }))
         exportToCSV(orders, `PMT_${locale === 'vi' ? 'Đơn_Hàng' : 'Orders'}_${dayjs(Date.now()).format('DD/MM/YYYY')}`, [
             { wch: 10 },
@@ -62,8 +61,7 @@ export default function UsersDashboardPage() {
             { wch: 40 },
             { wch: 20 },
             { wch: 20 },
-            { wch: 40 },
-            { wch: 20 }
+            { wch: 40 }
         ])
     }
 

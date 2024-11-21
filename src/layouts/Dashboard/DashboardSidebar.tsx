@@ -78,11 +78,6 @@ const DashboardSidebar: FC = () => {
                     label: t('toppings'),
                     key: '/toppings',
                     icon: <DeploymentUnitOutlined />
-                },
-                {
-                    label: t('vouchers'),
-                    key: '/vouchers',
-                    icon: <TagsOutlined />
                 }
             ]
         },

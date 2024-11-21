@@ -1,11 +1,10 @@
 import { ICustomer, IStaff } from './auth'
-import { IMilktea, ITopping, IVoucher } from './product'
+import { IMilktea, ITopping } from './product'
 
 export interface IOrder {
     orderId: number
     customerId: number
     totalPrice: number
-    voucherId: number
     note?: string
     createdAt: string
 
@@ -15,7 +14,6 @@ export interface IOrder {
     updatedAt: string
 
     customer?: Partial<ICustomer>
-    voucher?: Partial<IVoucher>
     items?: IOrderItem[]
     staff?: Partial<IStaff>
 }

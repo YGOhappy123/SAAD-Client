@@ -5,14 +5,13 @@ import { getI18n, useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Avatar, Button, Divider, Form, Input, Tooltip, Image, Badge, ConfigProvider, Row, Modal } from 'antd'
 import { CarryOutOutlined, HomeOutlined, LoadingOutlined } from '@ant-design/icons'
-import { ICartItem, ITopping, IVoucher } from '../../types'
+import { ICartItem, ITopping } from '../../types'
 import { RootState } from '../../store'
 import { setOrderNote } from '../../slices/app.slice'
 import { buttonStyle, containerStyle, inputStyle } from '../../assets/styles/globalStyle'
 import type { FormInstance } from 'antd/es/form'
 import FooterModals from './InfoModals'
 import Loading from '../../components/shared/Loading'
-import VoucherInput from './VoucherInput'
 import dayjs from 'dayjs'
 import useTitle from '../../hooks/useTitle'
 import useCart from '../../hooks/useCart'
@@ -35,7 +34,6 @@ const CheckoutPage = () => {
     const { detailedItems, totalPrice, isLoading } = useCart()
 
     const formRef = useRef<FormInstance>(null)
-    const [voucher, setVoucher] = useState<IVoucher | null>(null)
     const [checkoutDisabled, setCheckoutDisabled] = useState<boolean>(false)
     const checkIsCheckoutAvailable = useCallback(() => {
         const currentTime = dayjs(new Date()).format('HH:mm')
@@ -59,13 +57,6 @@ const CheckoutPage = () => {
         })
     }, [formRef.current])
 
-    const discount = useMemo(() => {
-        if (!voucher?.voucherId) return 0
-        else if (voucher?.discountType === 'Percent') {
-            return totalPrice * (voucher?.discountAmount / 100)
-        } else return voucher?.discountAmount > totalPrice ? totalPrice : voucher?.discountAmount
-    }, [voucher])
-
     const { checkoutMutation } = useCheckout()
     const { resetCartItemsMutation } = useCartItems({ enabledFetchCartItems: false })
     const onFinish = async (values: any) => {
@@ -82,7 +73,7 @@ const CheckoutPage = () => {
         Modal.confirm({
             icon: null,
             title: t(`your order total is {{total}}, please confirm before ordering`, {
-                total: new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice - discount)
+                total: new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice)
             }),
             okText: t('confirm'),
             cancelText: t('cancel'),
@@ -90,7 +81,6 @@ const CheckoutPage = () => {
                 try {
                     const { data } = await checkoutMutation.mutateAsync({
                         items,
-                        voucher: voucher?.voucherId,
                         note: values?.note
                     })
                     resetCartItemsMutation.mutate()
@@ -257,26 +247,12 @@ const CheckoutPage = () => {
                                 </div>
 
                                 <Divider style={{ borderColor: 'rgba(26, 26, 26, 0.12)' }} />
-                                <VoucherInput voucher={voucher} setVoucher={setVoucher} />
-
-                                <Divider style={{ borderColor: 'rgba(26, 26, 26, 0.12)' }} />
-                                <div className="display-price">
-                                    <span>{t('subtotal')}</span>
-                                    <span style={{ fontWeight: 500 }}>{`₫${totalPrice.toLocaleString('en-US')}`}</span>
-                                </div>
-
-                                <div className="display-price">
-                                    <span>{t('discount')}</span>
-                                    <span style={{ fontWeight: 500, color: 'green' }}>- {`₫${discount.toLocaleString('en-US')}`}</span>
-                                </div>
-
-                                <Divider style={{ borderColor: 'rgba(26, 26, 26, 0.12)' }} />
                                 <div className="display-price">
                                     <span style={{ fontSize: '1rem', fontWeight: 500 }}>{t('total')}:</span>
                                     <span>
                                         <span style={{ marginRight: 9, fontSize: '0.75rem' }}>VND</span>
                                         <span style={{ fontSize: '1.5rem', fontWeight: 500 }}>
-                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice - discount)}
+                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice)}
                                         </span>
                                     </span>
                                 </div>
