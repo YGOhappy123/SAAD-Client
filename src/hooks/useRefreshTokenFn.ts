@@ -19,7 +19,7 @@ const useRefreshTokenFn = () => {
         navigate('/auth')
     }
 
-    const refreshToken = async () =>
+    const refreshTokenFn = async () =>
         new Promise<string | null>((resolve, reject) => {
             axiosIns({
                 url: '/auth/refresh',
@@ -45,7 +45,7 @@ const useRefreshTokenFn = () => {
                 })
         })
 
-    return refreshToken
+    return refreshTokenFn
 }
 
 export default useRefreshTokenFn

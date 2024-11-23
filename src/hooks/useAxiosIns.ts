@@ -14,6 +14,7 @@ export const axiosIns = axios.create({
 
 const useAxiosIns = () => {
     const getAccessToken = () => cookies.get('access_token') || localStorage.getItem('access_token')
+    const getRefreshToken = () => cookies.get('refresh_token') || localStorage.getItem('refresh_token')
     const refreshTokenFn = useRefreshTokenFn()
 
     useEffect(() => {
@@ -23,9 +24,14 @@ const useAxiosIns = () => {
                     const token = getAccessToken()
                     config.headers['Authorization'] = `Bearer ${token}`
                 }
+
                 const i18n = getI18n()
-                if (config.params) config.params.locale = i18n.resolvedLanguage
-                else config.params = { locale: i18n.resolvedLanguage }
+                if (config.params) {
+                    config.params = { ...config.params, locale: i18n.resolvedLanguage }
+                } else {
+                    config.params = { locale: i18n.resolvedLanguage }
+                }
+
                 return config
             },
             error => {
@@ -37,10 +43,14 @@ const useAxiosIns = () => {
             response => response,
             async error => {
                 const prevRequest = error?.config
-                if (error?.response?.status === 401 && !prevRequest?.sent) {
+                const refreshToken = getRefreshToken()
+
+                if (error?.response?.status === 401 && !prevRequest?.sent && refreshToken) {
                     prevRequest.sent = true
+
                     const token = await refreshTokenFn()
                     if (!token) throw new Error('REFRESH_FAILED')
+
                     prevRequest.headers.Authorization = `Bearer ${token}`
                     return axiosIns({
                         ...prevRequest,
