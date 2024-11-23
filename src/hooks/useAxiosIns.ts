@@ -15,7 +15,7 @@ export const axiosIns = axios.create({
 const useAxiosIns = () => {
     const getAccessToken = () => cookies.get('access_token') || localStorage.getItem('access_token')
     const getRefreshToken = () => cookies.get('refresh_token') || localStorage.getItem('refresh_token')
-    const refreshTokenFn = useRefreshTokenFn()
+    const refreshTokenFn = useRefreshTokenFn(axiosIns)
 
     useEffect(() => {
         const requestIntercept = axiosIns.interceptors.request.use(
@@ -48,7 +48,7 @@ const useAxiosIns = () => {
                 if (error?.response?.status === 401 && !prevRequest?.sent && refreshToken) {
                     prevRequest.sent = true
 
-                    const token = await refreshTokenFn()
+                    const token = await refreshTokenFn(refreshToken)
                     if (!token) throw new Error('REFRESH_FAILED')
 
                     prevRequest.headers.Authorization = `Bearer ${token}`

@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
-import toastConfig from '../configs/toast'
-import cookies from '../libs/cookies'
-import { axiosIns } from './useAxiosIns'
 import { signOut } from '../slices/auth.slice'
 import dayjs from '../libs/dayjs'
+import toastConfig from '../configs/toast'
+import cookies from '../libs/cookies'
 
-const useRefreshTokenFn = () => {
+const useRefreshTokenFn = (axiosIns: AxiosInstance) => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -19,14 +19,14 @@ const useRefreshTokenFn = () => {
         navigate('/auth')
     }
 
-    const refreshTokenFn = async () =>
+    const refreshTokenFn = async (refreshToken: string) =>
         new Promise<string | null>((resolve, reject) => {
             axiosIns({
                 url: '/auth/refresh',
                 method: 'POST',
                 validateStatus: null,
                 data: {
-                    refreshToken: cookies.get('refresh_token') || localStorage.getItem('refresh_token')
+                    refreshToken: refreshToken
                 }
             })
                 .then(res => {
