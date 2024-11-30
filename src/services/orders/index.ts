@@ -103,7 +103,7 @@ export default ({ enabledFetchOrders }: { enabledFetchOrders?: boolean }) => {
     const updateOrderStatusMutation = useMutation({
         mutationFn: ({ orderId, newStatus }: { orderId: number; newStatus: OrderStatus }) =>
             axios.patch<IResponseData<IOrder>>(`/orders/status/${orderId}`, {
-                newStatus: newStatus
+                status: newStatus
             }),
         onSuccess: res => {
             if (isSearching) {
@@ -118,7 +118,7 @@ export default ({ enabledFetchOrders }: { enabledFetchOrders?: boolean }) => {
     const rejectOrderStatusMutation = useMutation({
         mutationFn: ({ orderId, rejectionReason }: { orderId: number; rejectionReason: string }) =>
             axios.patch<IResponseData<IOrder>>(`/orders/status/${orderId}`, {
-                newStatus: 'Rejected',
+                status: 'Rejected',
                 rejectionReason: rejectionReason
             }),
         onSuccess: res => {

@@ -2,12 +2,12 @@ import { FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Input, Modal } from 'antd'
+import { Divider, Modal } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { RootState } from '../store'
 import { signOut } from '../slices/auth.slice'
 import useAuth from '../services/auth'
-import { buttonStyle, inputStyle } from '../assets/styles/globalStyle'
+import { buttonStyle } from '../assets/styles/globalStyle'
 import '../assets/styles/components/ProfileSidebar.css'
 
 const TABS = [
@@ -47,25 +47,19 @@ const ProfileSidebar: FC = () => {
         })
     }
 
-    let confirmPW = ''
     const onDeleteAccountBtnClick = () => {
-        confirmPW = ''
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: t('are you sure you want to lock this account? This operation cannot be undone'),
             content: (
                 <div>
                     <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
-                    <p>{t('please enter your current password')}</p>
-                    <Input style={inputStyle} onChange={e => (confirmPW = e.target.value)} placeholder={t('password...').toString()} />
-                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
                 </div>
             ),
             okText: t('lock my account'),
             cancelText: t('cancel'),
             onOk: () => {
-                if (!confirmPW) return
-                return deactivateAccountMutation.mutateAsync({ password: confirmPW, customerId: user.userId })
+                return deactivateAccountMutation.mutateAsync({ targetUserId: user.id, targetUserRole: user.role })
             },
             okButtonProps: {
                 danger: true,

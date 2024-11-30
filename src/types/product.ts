@@ -20,6 +20,10 @@ export interface IMilktea {
     soldUnitsThisWeek?: number
     soldUnitsThisMonth?: number
     soldUnitsThisYear?: number
+
+    priceS?: number
+    priceM?: number
+    priceL?: number
 }
 
 export interface ITopping {

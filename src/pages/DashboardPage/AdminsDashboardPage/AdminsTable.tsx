@@ -1,9 +1,11 @@
 import { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Button, Table, Tag } from 'antd'
+import { Avatar, Button, Divider, Modal, Table } from 'antd'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 import { IAdmin } from '../../../types'
 import { RootState } from '../../../store'
+import { buttonStyle } from '../../../assets/styles/globalStyle'
 import dayjs from '../../../libs/dayjs'
 
 interface AdminsTableProps {
@@ -14,16 +16,40 @@ interface AdminsTableProps {
     itemPerPage: number
     setItemPerPage: (newItemPerPage: number) => void
     setCurrent: (value: number) => void
-    onSelectAdmin: (admin: IAdmin) => void
+    onDelete: (adminId: number) => void
 }
 
-const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, admins, total, setItemPerPage, itemPerPage, onSelectAdmin }) => {
+const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, admins, total, setItemPerPage, itemPerPage, onDelete }) => {
     const { t } = useTranslation()
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const onUpdateBtnClick = (admin: IAdmin) => {
-        if (user.userId !== admin.adminId) return
-        onSelectAdmin(admin)
+    const onDeleteBtnClick = (adminId: number, isActive: boolean) => {
+        if (!isActive || adminId === user.id) return
+
+        Modal.confirm({
+            icon: <ExclamationCircleFilled />,
+            title: t('are you sure you want to lock this account? This operation cannot be undone'),
+            content: (
+                <div>
+                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
+                </div>
+            ),
+            okText: t('lock account'),
+            cancelText: t('cancel'),
+            onOk: () => {
+                onDelete(adminId)
+            },
+            okButtonProps: {
+                danger: true,
+                shape: 'round',
+                style: { ...buttonStyle, width: '130px', marginLeft: '12px' }
+            },
+            cancelButtonProps: {
+                type: 'text',
+                shape: 'round',
+                style: { ...buttonStyle, width: '100px', border: '1px solid' }
+            }
+        })
     }
     const onChange = (values: any) => {
         const { current } = values
@@ -34,13 +60,13 @@ const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, 
         <>
             <Table
                 style={{ width: '100%' }}
-                rowKey={(record: IAdmin) => record.adminId}
+                rowKey={(record: IAdmin) => record.id}
                 onChange={onChange}
                 loading={isLoading}
                 columns={[
                     {
                         title: t('id') + ' ' + t('admin').toLocaleLowerCase(),
-                        dataIndex: 'adminId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
@@ -89,9 +115,24 @@ const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, 
                         )
                     },
                     {
+                        title: 'Phone Number',
+                        dataIndex: 'phoneNumber',
+                        width: 180,
+                        key: 'phoneNumber',
+                        render: text => (
+                            <div>
+                                {text || (
+                                    <small>
+                                        <em>{t('not updated yet')}</em>
+                                    </small>
+                                )}
+                            </div>
+                        )
+                    },
+                    {
                         title: t('full name'),
                         key: 'fullName',
-                        width: 240,
+                        width: 200,
                         render: (_, record) => (
                             <span>
                                 {`${record.lastName} ${record.firstName}` || (
@@ -100,21 +141,6 @@ const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, 
                                     </small>
                                 )}
                             </span>
-                        )
-                    },
-                    {
-                        title: t('gender'),
-                        dataIndex: 'gender',
-                        key: 'gender',
-                        align: 'center',
-                        render: text => (
-                            <Tag color={text === 'Male' ? 'blue' : 'pink'} style={{ marginRight: 0 }}>
-                                {t(text.toLocaleLowerCase()) ?? (
-                                    <small>
-                                        <em>{t('not updated yet')}</em>
-                                    </small>
-                                )}
-                            </Tag>
                         )
                     },
                     {
@@ -145,12 +171,12 @@ const CustomersTable: FC<AdminsTableProps> = ({ current, setCurrent, isLoading, 
                         render: (_, record) => {
                             return (
                                 <Button
-                                    onClick={() => onUpdateBtnClick(record)}
+                                    onClick={() => onDeleteBtnClick(record.id, record.isActive as boolean)}
                                     shape="round"
-                                    type="primary"
-                                    disabled={user.userId !== record.adminId}
+                                    danger
+                                    disabled={!record.isActive || record.id === user.id}
                                 >
-                                    {t('update')}
+                                    {record.isActive ? t('lock account') : t('account disabled')}
                                 </Button>
                             )
                         }

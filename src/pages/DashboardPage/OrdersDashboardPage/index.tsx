@@ -48,7 +48,9 @@ export default function UsersDashboardPage() {
                 .join('; '),
             [t('total price')]: `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(rawOrder.totalPrice)}`,
             [t('note')]: rawOrder.note ?? t('none'),
-            [t('staff in charge')]: rawOrder.staff ? `${rawOrder.staff.lastName} ${rawOrder.staff.firstName}` : t('not updated yet'),
+            [t('staff in charge')]: rawOrder.processingStaff
+                ? `${rawOrder.processingStaff.lastName} ${rawOrder.processingStaff.firstName}`
+                : t('not updated yet'),
             [t('status')]: t(rawOrder.status.toLocaleLowerCase()),
             [t('rejection reason')]: rawOrder.rejectionReason
         }))

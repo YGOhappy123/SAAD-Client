@@ -46,11 +46,11 @@ const CategoriesDashboardPage = () => {
     } = useCategories({ enabledFetchCategories: true })
 
     const onAddCategory = (values: Partial<ICategory>) => {
-        addCategoryMutation.mutateAsync(values).finally(() => setAddModalOpen(false))
+        addCategoryMutation.mutateAsync(values).then(() => setAddModalOpen(false))
     }
 
     const onUpdateCategory = (values: Partial<ICategory>) => {
-        updateCategoryMutation.mutateAsync({ categoryId: selectedCategory?.categoryId as number, data: values })
+        updateCategoryMutation.mutateAsync({ categoryId: selectedCategory?.id as number, data: values }).then(() => setUpdateModalOpen(false))
     }
 
     const onDeleteCategory = (categoryId: number) => {
@@ -58,13 +58,13 @@ const CategoriesDashboardPage = () => {
     }
 
     const fetchAllCategoriesMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<ICategory[]>>(`/category/get?sort=${JSON.stringify({ categoryId: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<ICategory[]>>(`/category/get?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
         const { data } = await fetchAllCategoriesMutation.mutateAsync()
         const categories = data?.data.map(rawCategory => ({
-            [t('id').toString()]: rawCategory.categoryId,
+            [t('id').toString()]: rawCategory.id,
             [t('created at')]: dayjs(rawCategory.createdAt).format('DD/MM/YYYY'),
             [t('name vi')]: rawCategory.nameVi,
             [t('name en')]: rawCategory.nameEn

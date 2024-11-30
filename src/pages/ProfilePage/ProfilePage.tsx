@@ -45,7 +45,9 @@ const ProfilePage = () => {
 
         if (user.role === 'Customer') {
             updateProfileMutation
-                .mutateAsync({ data: values })
+                .mutateAsync({
+                    data: { ...values, email: values.email || null, phoneNumber: values.phoneNumber || null, address: values.address || null }
+                })
                 .then(() => {
                     dispatch(setUser({ ...user, ...values }))
                 })
@@ -94,6 +96,8 @@ const ProfilePage = () => {
                                 <Form.Item
                                     name="phoneNumber"
                                     rules={[
+                                        { required: user.role === 'Admin', message: t('required').toString() },
+                                        { whitespace: user.role === 'Admin', message: t('required').toString() },
                                         {
                                             pattern: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
                                             message: t('invalid phone number').toString()

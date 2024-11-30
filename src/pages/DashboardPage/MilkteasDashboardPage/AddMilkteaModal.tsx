@@ -112,11 +112,9 @@ export const AddProductForm = ({
             isAvailable: values.isAvailable,
             categoryId: values.category.value,
             image: featuredImage,
-            price: {
-                S: values.priceS,
-                M: values.priceM,
-                L: values.priceL
-            }
+            priceS: values.priceS,
+            priceM: values.priceM,
+            priceL: values.priceL
         })
     }
 
@@ -128,7 +126,7 @@ export const AddProductForm = ({
     const handleUpload = ({ file }: UploadRequestOption<any>) => {
         if (featuredImage) return
         uploadMutation.mutateAsync({ file, folder: 'product' }).then(res => {
-            setFeaturedImage(res.data.data?.url)
+            setFeaturedImage(res.data.data?.imageUrl)
         })
     }
 
@@ -136,9 +134,9 @@ export const AddProductForm = ({
         if (isLoadingCategory) return [{ key: 'loading', label: <Spin />, disabled: true }]
         else if (!categories?.length) return [{ key: 'empty', label: <Empty />, disabled: true }]
         return categories.map(category => ({
-            key: category.categoryId,
+            key: category.id,
             label: locale === 'vi' ? category.nameVi : category.nameEn,
-            value: category.categoryId
+            value: category.id
         }))
     }, [categories, isLoadingCategory])
 

@@ -1,4 +1,4 @@
-import { IAdmin, ICustomer, IStaff } from './auth'
+import { IAdmin, ICustomer } from './auth'
 import { IMilktea, ITopping } from './product'
 
 export interface IOrder {

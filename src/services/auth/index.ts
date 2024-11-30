@@ -9,7 +9,7 @@ import cookies from '../../libs/cookies'
 import dayjs from '../../libs/dayjs'
 import useAxiosIns from '../../hooks/useAxiosIns'
 import { onError } from '../../utils/error-handlers'
-import { IResponseData, IUser } from '../../types'
+import { IResponseData, IRole, IUser } from '../../types'
 import { setUser, setLogged, signOut } from '../../slices/auth.slice'
 import { setOrderNote, resetAppState } from '../../slices/app.slice'
 
@@ -96,8 +96,11 @@ export default () => {
     })
 
     const deactivateAccountMutation = useMutation({
-        mutationFn: (data: { password: string; customerId: number }) =>
-            axios.post<IResponseData<any>>(`/auth/deactivate-account/${data.customerId}`, { password: data.password }),
+        mutationFn: (data: { targetUserId: number; targetUserRole: IRole }) =>
+            axios.post<IResponseData<any>>(`/auth/deactivate-account`, {
+                targetUserId: data.targetUserId,
+                targetUserRole: data.targetUserRole
+            }),
         onError: onError,
         onSuccess: res => {
             toast(t(res.data.message), toastConfig('success'))

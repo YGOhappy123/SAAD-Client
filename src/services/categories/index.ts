@@ -42,7 +42,7 @@ export default ({ enabledFetchCategories }: { enabledFetchCategories?: boolean }
     const searchCategoriesQuery = useQuery(['search-categories', query, sort], {
         queryFn: () =>
             axios.get<IResponseData<ICategory[]>>(
-                `/category/get?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
+                `/products/categories?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
             ),
         keepPreviousData: true,
         onError: onError,
@@ -75,7 +75,8 @@ export default ({ enabledFetchCategories }: { enabledFetchCategories?: boolean }
 
     const fetchCategoriesQuery = useQuery(['categories', current, itemPerPage], {
         queryFn: () => {
-            if (!isSearching) return axios.get<IResponseData<ICategory[]>>(`/category/get?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
+            if (!isSearching)
+                return axios.get<IResponseData<ICategory[]>>(`/products/categories?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
         },
         keepPreviousData: true,
         onError: onError,
@@ -93,7 +94,7 @@ export default ({ enabledFetchCategories }: { enabledFetchCategories?: boolean }
     })
 
     const addCategoryMutation = useMutation({
-        mutationFn: (data: Partial<ICategory>) => axios.post<IResponseData<any>>('/category/add', data),
+        mutationFn: (data: Partial<ICategory>) => axios.post<IResponseData<any>>('/products/categories', data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-categories')
@@ -106,7 +107,7 @@ export default ({ enabledFetchCategories }: { enabledFetchCategories?: boolean }
 
     const updateCategoryMutation = useMutation({
         mutationFn: ({ categoryId, data }: { categoryId: number; data: Partial<ICategory> }) =>
-            axios.patch<IResponseData<ICategory>>(`/category/update/${categoryId}`, data),
+            axios.patch<IResponseData<ICategory>>(`/products/categories/${categoryId}`, data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-categories')
@@ -118,7 +119,7 @@ export default ({ enabledFetchCategories }: { enabledFetchCategories?: boolean }
     })
 
     const toggleCategoryHiddenStatusMutation = useMutation({
-        mutationFn: (categoryId: number) => axios.patch<IResponseData<unknown>>(`/category/toggle/${categoryId}`),
+        mutationFn: (categoryId: number) => axios.post<IResponseData<unknown>>(`/products/categories/toggle-active/${categoryId}`),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-categories')

@@ -3,12 +3,11 @@ import { useMutation } from 'react-query'
 import { getI18n, useTranslation } from 'react-i18next'
 import { Col, Row, Button } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
-import { IResponseData, ICustomer, IAdmin } from '../../../types'
+import { IResponseData, IAdmin } from '../../../types'
 import { exportToCSV } from '../../../utils/export-csv'
 import { buttonStyle, secondaryButtonStyle } from '../../../assets/styles/globalStyle'
 import AdminsTable from './AdminsTable'
 import AddAdminModal from './AddAdminModal'
-import UpdateAdminModal from './UpdateAdminModal'
 import useAdmins from '../../../services/admins'
 import SortAndFilter from './SortAndFilter'
 import useAxiosIns from '../../../hooks/useAxiosIns'
@@ -25,7 +24,7 @@ export default function AdminsDashboardPage() {
         fetchAdminsQuery,
         searchAdminsQuery,
         addAdminMutation,
-        updateAdminMutation,
+        deleteAdminMutation,
         itemPerPage,
         setItemPerPage,
         onFilterSearch,
@@ -37,26 +36,24 @@ export default function AdminsDashboardPage() {
     const axios = useAxiosIns()
     useTitle(`${t('admin')} - PMT`)
 
-    const [shouldAddModalOpen, setAddModelOpen] = useState(false)
-    const [shouldUpdateModalOpen, setUpdateModalOpen] = useState(false)
-    const [selectedAdmin, setSelectedAdmin] = useState<IAdmin | null>(null)
+    const [shouldAddModalOpen, setAddModalOpen] = useState(false)
 
     const onAddAdmin = (values: Partial<IAdmin>) => {
-        addAdminMutation.mutateAsync(values).finally(() => setAddModelOpen(false))
+        addAdminMutation.mutateAsync(values).then(() => setAddModalOpen(false))
     }
 
-    const onUpdateAdmin = (values: Partial<IAdmin>) => {
-        updateAdminMutation.mutateAsync({ adminId: selectedAdmin?.adminId as number, data: values }).finally(() => setUpdateModalOpen(false))
+    const onDeleteAdmin = (adminId: number) => {
+        deleteAdminMutation.mutateAsync(adminId)
     }
 
     const fetchAllAdminsMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<IAdmin[]>>(`/manage/admins?sort=${JSON.stringify({ adminId: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<IAdmin[]>>(`/admins?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
         const { data } = await fetchAllAdminsMutation.mutateAsync()
         const users = data?.data.map(rawAdmin => ({
-            [t('id').toString()]: rawAdmin.adminId,
+            [t('id').toString()]: rawAdmin.id,
             [t('created at')]: dayjs(rawAdmin.createdAt).format('DD/MM/YYYY'),
             [t('last name')]: rawAdmin.lastName,
             [t('first name')]: rawAdmin.firstName,
@@ -80,15 +77,7 @@ export default function AdminsDashboardPage() {
                 onSubmit={onAddAdmin}
                 isLoading={addAdminMutation.isLoading}
                 shouldOpen={shouldAddModalOpen}
-                onCancel={() => setAddModelOpen(false)}
-            />
-
-            <UpdateAdminModal
-                isLoading={updateAdminMutation.isLoading}
-                onSubmit={onUpdateAdmin}
-                admin={selectedAdmin}
-                shouldOpen={shouldUpdateModalOpen}
-                onCancel={() => setUpdateModalOpen(false)}
+                onCancel={() => setAddModalOpen(false)}
             />
 
             <Col span={24}>
@@ -102,7 +91,7 @@ export default function AdminsDashboardPage() {
                                 <SortAndFilter onChange={buildQuery} onSearch={onFilterSearch} onReset={onResetFilterSearch} />
                             </Col>
                             <Col span={5}>
-                                <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModelOpen(true)}>
+                                <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModalOpen(true)}>
                                     <strong>+ {t('add')}</strong>
                                 </Button>
                             </Col>
@@ -125,11 +114,8 @@ export default function AdminsDashboardPage() {
 
                 <AdminsTable
                     total={total as number}
-                    onSelectAdmin={admin => {
-                        setSelectedAdmin(admin)
-                        setUpdateModalOpen(true)
-                    }}
                     isLoading={searchAdminsQuery.isFetching || fetchAdminsQuery.isFetching}
+                    onDelete={onDeleteAdmin}
                     admins={admins}
                     current={current}
                     setCurrent={setCurrent}

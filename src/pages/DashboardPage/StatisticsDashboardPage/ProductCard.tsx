@@ -26,8 +26,8 @@ export default function ProductCard({ product }: IProductCardProps) {
     const [type, setType] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('daily')
 
     const getProductSalesDataQuery = useQuery({
-        queryKey: ['product-sales-data', product.milkteaId],
-        queryFn: () => axios.get<IResponseData<ProductSalesDataByTime>>(`/statistic/products/${product.milkteaId}`),
+        queryKey: ['product-sales-data', product.id],
+        queryFn: () => axios.get<IResponseData<ProductSalesDataByTime>>(`/statistic/products/${product.id}`),
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
         select: res => res.data?.data
@@ -49,8 +49,8 @@ export default function ProductCard({ product }: IProductCardProps) {
         }
     }, [type, getProductSalesDataQuery.isFetching])
 
-    const minPrice = (product.price?.S ?? product.price?.M ?? product.price?.L) as number
-    const maxPrice = (product.price?.L ?? product.price?.M ?? product.price?.S) as number
+    const minPrice = (product.price?.s ?? product.price?.m ?? product.price?.l) as number
+    const maxPrice = (product.price?.l ?? product.price?.m ?? product.price?.s) as number
 
     const segmentedOptions = [
         {

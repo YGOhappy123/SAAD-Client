@@ -41,17 +41,17 @@ export default function ToppingsDashboardPage() {
     const locale = getI18n().resolvedLanguage as 'vi' | 'en'
     useTitle(`${t('Toppings')} - PMT`)
 
-    const [shouldAddModalOpen, setAddModelOpen] = useState(false)
+    const [shouldAddModalOpen, setAddModalOpen] = useState(false)
     const [shouldUpdateModalOpen, setUpdateModalOpen] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState<ITopping | null>(null)
     const user = useSelector((state: RootState) => state.auth.user)
 
     const onAddProduct = (values: Partial<ITopping>) => {
-        addProductMutation.mutateAsync(values).finally(() => setAddModelOpen(false))
+        addProductMutation.mutateAsync(values).then(() => setAddModalOpen(false))
     }
 
     const onUpdateProduct = (values: Partial<ITopping>) => {
-        updateProductMutation.mutateAsync({ productId: selectedProduct?.id as number, data: values }).finally(() => setUpdateModalOpen(false))
+        updateProductMutation.mutateAsync({ productId: selectedProduct?.id as number, data: values }).then(() => setUpdateModalOpen(false))
     }
 
     const onDeleteProduct = (productId: number) => {
@@ -59,7 +59,7 @@ export default function ToppingsDashboardPage() {
     }
 
     const fetchAllProductsMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?sort=${JSON.stringify({ id: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<ITopping[]>>(`/products/toppings?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
@@ -100,7 +100,7 @@ export default function ToppingsDashboardPage() {
                 onSubmit={onAddProduct}
                 isLoading={addProductMutation.isLoading}
                 shouldOpen={shouldAddModalOpen}
-                onCancel={() => setAddModelOpen(false)}
+                onCancel={() => setAddModalOpen(false)}
             />
 
             <Col span={24}>
@@ -115,7 +115,7 @@ export default function ToppingsDashboardPage() {
                             </Col>
                             {user.role === 'Admin' && (
                                 <Col span={5}>
-                                    <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModelOpen(true)}>
+                                    <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModalOpen(true)}>
                                         <strong>+ {t('add')}</strong>
                                     </Button>
                                 </Col>

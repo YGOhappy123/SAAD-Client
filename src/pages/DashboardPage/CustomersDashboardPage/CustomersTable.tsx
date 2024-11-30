@@ -1,10 +1,8 @@
 import { FC } from 'react'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Button, Modal, Table } from 'antd'
+import { Avatar, Button, Divider, Modal, Table } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { ICustomer } from '../../../types'
-import { RootState } from '../../../store'
 import { buttonStyle } from '../../../assets/styles/globalStyle'
 import dayjs from '../../../libs/dayjs'
 
@@ -21,14 +19,18 @@ interface UsersTableProps {
 
 const CustomersTable: FC<UsersTableProps> = ({ current, setCurrent, isLoading, users, onDelete, total, setItemPerPage, itemPerPage }) => {
     const { t } = useTranslation()
-    const user = useSelector((state: RootState) => state.auth.user)
 
     const onDeleteBtnClick = (userId: number, isActive: boolean) => {
-        if (!isActive || user.role !== 'Admin') return
+        if (!isActive) return
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: t('are you sure you want to lock this account? This operation cannot be undone'),
+            content: (
+                <div>
+                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
+                </div>
+            ),
             okText: t('lock account'),
             cancelText: t('cancel'),
             onOk: () => {
@@ -55,13 +57,13 @@ const CustomersTable: FC<UsersTableProps> = ({ current, setCurrent, isLoading, u
         <>
             <Table
                 style={{ width: '100%' }}
-                rowKey={(record: ICustomer) => record.userId}
+                rowKey={(record: ICustomer) => record.id}
                 onChange={onChange}
                 loading={isLoading}
                 columns={[
                     {
                         title: t('customer id'),
-                        dataIndex: 'userId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
@@ -186,12 +188,12 @@ const CustomersTable: FC<UsersTableProps> = ({ current, setCurrent, isLoading, u
                         render: (_, record) => {
                             return (
                                 <Button
-                                    onClick={() => onDeleteBtnClick(record.userId, record.isActive as boolean)}
+                                    onClick={() => onDeleteBtnClick(record.id, record.isActive as boolean)}
                                     type="text"
                                     shape="round"
                                     danger
                                     style={{ border: '1px solid' }}
-                                    disabled={!record.isActive || user.role !== 'Admin'}
+                                    disabled={!record.isActive}
                                 >
                                     {record.isActive ? t('lock account') : t('account disabled')}
                                 </Button>

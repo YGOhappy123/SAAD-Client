@@ -27,7 +27,7 @@ export default function OverallDashboardPage() {
 
     const getMilkteasQuery = useQuery({
         queryKey: 'statistic-milkteas',
-        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/product/getAllMilkTeas`),
+        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/products/milkteas`),
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
         select: res => res.data?.data
@@ -88,7 +88,7 @@ export default function OverallDashboardPage() {
                 {!getMilkteasQuery.isLoading && milkteas?.length && (
                     <Row gutter={12}>
                         {milkteas?.map(milktea => (
-                            <Col xs={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 8 }} key={milktea.milkteaId} style={{ paddingBottom: '24px' }}>
+                            <Col xs={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 8 }} key={milktea.id} style={{ paddingBottom: '24px' }}>
                                 <ProductCard product={milktea} />
                             </Col>
                         ))}

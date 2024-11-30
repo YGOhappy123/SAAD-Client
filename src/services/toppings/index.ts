@@ -90,7 +90,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     const fetchProductsQuery = useQuery(['products', current, itemPerPage], {
         queryFn: () => {
             if (!isSearching)
-                return axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
+                return axios.get<IResponseData<ITopping[]>>(`/products/toppings?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
         },
         keepPreviousData: true,
         onError: onError,
@@ -108,7 +108,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     })
 
     const addProductMutation = useMutation({
-        mutationFn: (data: Partial<ITopping>) => axios.post<IResponseData<ITopping>>('/product/addTopping', data),
+        mutationFn: (data: Partial<ITopping>) => axios.post<IResponseData<ITopping>>('/products/toppings', data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')
@@ -121,7 +121,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
 
     const updateProductMutation = useMutation({
         mutationFn: ({ productId, data }: { productId: number; data: Partial<ITopping> }) =>
-            axios.patch<IResponseData<ITopping>>(`/product/updateTopping/${productId}`, data),
+            axios.patch<IResponseData<ITopping>>(`/products/toppings/${productId}`, data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')
@@ -133,7 +133,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     })
 
     const toggleProductHiddenStatusMutation = useMutation({
-        mutationFn: (productId: number) => axios.patch<IResponseData<unknown>>(`/product/toggleTopping/${productId}`),
+        mutationFn: (productId: number) => axios.post<IResponseData<unknown>>(`/products/toppings/toggle-active/${productId}`),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')

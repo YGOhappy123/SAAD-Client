@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { getI18n, useTranslation } from 'react-i18next'
-import { Button, Modal, Table, Tag, Image } from 'antd'
+import { Button, Modal, Table, Tag, Image, Divider } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { ITopping } from '../../../types'
 import { RootState } from '../../../store'
@@ -35,15 +35,19 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
     const user = useSelector((state: RootState) => state.auth.user)
 
     const onDeleteBtnClick = (productId: number, isActive: boolean) => {
-        if (user.role !== 'Admin') return
         const title = isActive
-            ? `${t('are you sure that you want to show this product')}?`
-            : `${t('are you sure that you want to hide this product')}? ${t("all customers' cart items related to this product would be deleted")}!`
+            ? `${t('are you sure that you want to hide this product')}? ${t("all customers' cart items related to this product would be deleted")}!`
+            : `${t('are you sure that you want to show this product')}?`
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: title,
-            okText: isActive ? t('show in menu') : t('hide from menu'),
+            content: (
+                <div>
+                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
+                </div>
+            ),
+            okText: isActive ? t('hide from menu') : t('show in menu'),
             cancelText: t('cancel'),
             onOk: () => {
                 onDelete(productId)
@@ -205,12 +209,12 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
                                         <Button
                                             onClick={() => {
-                                                if (record.isActive) return
+                                                if (!record.isActive) return
                                                 onUpdateBtnClick(record)
                                             }}
                                             shape="round"
                                             type="primary"
-                                            disabled={record.isActive}
+                                            disabled={!record.isActive}
                                         >
                                             {t('update')}
                                         </Button>
@@ -220,9 +224,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                                             shape="round"
                                             danger
                                             style={{ border: '1px solid' }}
-                                            disabled={user.role !== 'Admin'}
                                         >
-                                            {record.isActive ? t('show in menu') : t('hide from menu')}
+                                            {record.isActive ? t('hide from menu') : t('show in menu')}
                                         </Button>
                                     </div>
                                 </>

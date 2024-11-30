@@ -25,13 +25,19 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
     const queryClient = useQueryClient()
     const axios = useAxiosIns()
 
-    const buildQuery = (values: { searchEmail: string; searchName: string; gender: string; sort: string; range: string[] | any[] | undefined }) => {
-        const { searchEmail, searchName, gender, sort, range } = values
+    const buildQuery = (values: {
+        searchEmail: string
+        searchName: string
+        searchPhone: string
+        sort: string
+        range: string[] | any[] | undefined
+    }) => {
+        const { searchEmail, searchName, searchPhone, sort, range } = values
         const query: any = {}
 
         if (searchEmail) query.email = searchEmail.trim()
         if (searchName) query.name = searchName.trim()
-        if (gender) query.gender = gender !== 'All' ? gender : undefined
+        if (searchPhone) query.phoneNumber = searchPhone.trim()
         if (range) {
             query.startTime = dayjs(range[0]).format('YYYY-MM-DD')
             query.endTime = dayjs(range[1]).format('YYYY-MM-DD')
@@ -42,9 +48,7 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
 
     const searchAdminsQuery = useQuery(['search-admins', query, sort, itemPerPage], {
         queryFn: () =>
-            axios.get<IResponseData<IAdmin[]>>(
-                `/manage/admins?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
-            ),
+            axios.get<IResponseData<IAdmin[]>>(`/admins?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`),
         keepPreviousData: true,
         onError: onError,
         enabled: false,
@@ -86,9 +90,25 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
         onError: onError
     })
 
+    const deleteAdminMutation = useMutation({
+        mutationFn: (adminId: number) =>
+            axios.post<IResponseData<unknown>>(`/auth/deactivate-account`, {
+                targetUserId: adminId,
+                targetUserRole: 'Admin'
+            }),
+        onSuccess: res => {
+            if (isSearching) {
+                queryClient.invalidateQueries('search-admins')
+                searchAdminsQuery.refetch()
+            } else queryClient.invalidateQueries('admins')
+            toast(t(res.data.message), toastConfig('success'))
+        },
+        onError: onError
+    })
+
     const fetchAdminsQuery = useQuery(['admins', current, itemPerPage], {
         queryFn: () => {
-            if (!isSearching) return axios.get<IResponseData<IAdmin[]>>(`/manage/admins?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
+            if (!isSearching) return axios.get<IResponseData<IAdmin[]>>(`/admins?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
         },
         keepPreviousData: true,
         onError: onError,
@@ -106,7 +126,7 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
     })
 
     const addAdminMutation = useMutation({
-        mutationFn: (data: Partial<IAdmin>) => axios.post<IResponseData<any>>('/manage/admins/new', data),
+        mutationFn: (data: Partial<IAdmin>) => axios.post<IResponseData<any>>('/admins', data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-admins')
@@ -128,6 +148,7 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
         searchAdminsQuery,
         addAdminMutation,
         updateAdminMutation,
+        deleteAdminMutation,
         itemPerPage,
         setItemPerPage,
         onFilterSearch,

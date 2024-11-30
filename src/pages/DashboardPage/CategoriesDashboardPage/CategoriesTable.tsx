@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useSelector } from 'react-redux'
-import { Button, Modal, Space, Table } from 'antd'
+import { Button, Divider, Modal, Space, Table } from 'antd'
 import { ICategory } from '../../../types'
 import { useTranslation } from 'react-i18next'
 import { ExclamationCircleFilled } from '@ant-design/icons'
@@ -35,18 +35,21 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
     const user = useSelector((state: RootState) => state.auth.user)
 
     const onDeleteBtnClick = (categoryId: number, isActive: number | boolean) => {
-        if (user.role !== 'Admin') return
-
         const title = isActive
-            ? `${t('are you sure that you want to show this category')}?`
-            : `${t('are you sure that you want to hide this category')}? ${t(
+            ? `${t('are you sure that you want to hide this category')}? ${t(
                   "all milkteas and customers' cart items related to this category would be hidden as well"
               )}!`
+            : `${t('are you sure that you want to show this category')}?`
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: title,
-            okText: isActive ? t('show in menu') : t('hide from menu'),
+            content: (
+                <div>
+                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
+                </div>
+            ),
+            okText: isActive ? t('hide from menu') : t('show in menu'),
             cancelText: t('cancel'),
             onOk: () => {
                 onDelete(categoryId)
@@ -75,14 +78,14 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
         <>
             <Table
                 style={{ width: '100%' }}
-                rowKey={(record: ICategory) => record.categoryId as number}
+                rowKey={(record: ICategory) => record.id as number}
                 onChange={onChange}
                 loading={isLoading}
                 columns={[
                     {
                         title: t('id') + ' ' + t('category').toLocaleLowerCase(),
                         width: 200,
-                        dataIndex: 'categoryId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
@@ -143,24 +146,23 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
                                     <Space size="middle">
                                         <Button
                                             onClick={() => {
-                                                if (record.isActive) return
+                                                if (!record.isActive) return
                                                 onUpdateBtnClick(record)
                                             }}
                                             shape="round"
                                             type="primary"
-                                            disabled={user.role !== 'Admin' || record.isActive}
+                                            disabled={!record.isActive}
                                         >
                                             {t('edit')}
                                         </Button>
                                         <Button
-                                            onClick={() => onDeleteBtnClick(record?.categoryId as number, record.isActive)}
+                                            onClick={() => onDeleteBtnClick(record?.id as number, record.isActive)}
                                             type="text"
                                             shape="round"
                                             danger
-                                            disabled={user.role !== 'Admin'}
                                             style={{ border: '1px solid' }}
                                         >
-                                            {record.isActive ? t('show in menu') : t('hide from menu')}
+                                            {record.isActive ? t('hide from menu') : t('show in menu')}
                                         </Button>
                                     </Space>
                                 </>

@@ -4,7 +4,7 @@ import { getI18n, useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { Button, Modal, Table, Tag, Avatar, Divider, Input } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
-import { ICustomer, IOrder, IOrderItem, IStaff, OrderStatus } from '../../../types'
+import { IAdmin, ICustomer, IOrder, IOrderItem, OrderStatus } from '../../../types'
 import { RootState } from '../../../store'
 import { buttonStyle, inputStyle } from '../../../assets/styles/globalStyle'
 import useOrders from '../../../services/orders'
@@ -28,17 +28,15 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
     const { updateOrderStatusMutation, rejectOrderStatusMutation } = useOrders({ enabledFetchOrders: false })
 
     const onUpdateBtnClick = (order: IOrder, type: OrderStatus) => {
-        if (user.role !== 'Staff') return
         if (type === 'Accepted' && order.status !== 'Pending') return
-        if (type === 'Done' && ((order.status !== 'Pending' && order.staffId !== user.userId) || order.status !== 'Accepted')) return
+        if (type === 'Done' && ((order.status !== 'Pending' && order.processingStaffId !== user.id) || order.status !== 'Accepted')) return
 
         updateOrderStatusMutation.mutate({ orderId: order.id, newStatus: type })
     }
 
     let rejectionReason = ''
     const onRejectBtnClick = (order: IOrder) => {
-        if (user.role !== 'Staff') return
-        if (order.status !== 'Pending' && (order.staffId !== user.userId || order.status !== 'Accepted')) return
+        if (order.status !== 'Pending' && (order.processingStaffId !== user.id || order.status !== 'Accepted')) return
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
@@ -98,7 +96,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                 columns={[
                     {
                         title: t('id'),
-                        dataIndex: 'orderId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
@@ -193,10 +191,10 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                     },
                     {
                         title: t('staff in charge'),
-                        dataIndex: 'staff',
+                        dataIndex: 'processingStaff',
                         key: 'staff',
                         width: 200,
-                        render: (value: Partial<IStaff>) => (
+                        render: (value: Partial<IAdmin>) => (
                             <>
                                 {value ? (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -243,7 +241,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                                         onClick={() => onUpdateBtnClick(record, 'Accepted')}
                                         shape="round"
                                         type="primary"
-                                        disabled={user.role !== 'Staff' || record.status !== 'Pending'}
+                                        disabled={record.status !== 'Pending'}
                                         style={{ minWidth: 180 }}
                                     >
                                         {t('accept order')}
@@ -253,8 +251,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                                         shape="round"
                                         danger
                                         disabled={
-                                            user.role !== 'Staff' ||
-                                            (record.status !== 'Pending' && (record.staffId !== user.userId || record.status !== 'Accepted'))
+                                            record.status !== 'Pending' && (record.processingStaffId !== user.id || record.status !== 'Accepted')
                                         }
                                         style={{ border: '1px solid', minWidth: 180 }}
                                     >
@@ -266,9 +263,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                                         shape="round"
                                         style={{ border: '1px solid', minWidth: 180 }}
                                         disabled={
-                                            user.role !== 'Staff' ||
-                                            (record.status !== 'Pending' && record.staffId !== user.userId) ||
-                                            record.status !== 'Accepted'
+                                            (record.status !== 'Pending' && record.processingStaffId !== user.id) || record.status !== 'Accepted'
                                         }
                                     >
                                         {t('mark as done')}

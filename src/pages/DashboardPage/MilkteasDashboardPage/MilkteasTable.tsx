@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { getI18n, useTranslation } from 'react-i18next'
-import { Button, Modal, Table, Tag, Image } from 'antd'
+import { Button, Modal, Table, Tag, Image, Divider } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { IMilktea } from '../../../types'
 import { RootState } from '../../../store'
@@ -35,15 +35,19 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
     const user = useSelector((state: RootState) => state.auth.user)
 
     const onDeleteBtnClick = (productId: number, isActive: boolean) => {
-        if (user.role !== 'Admin') return
         const title = isActive
-            ? `${t('are you sure that you want to show this product')}?`
-            : `${t('are you sure that you want to hide this product')}? ${t("all customers' cart items related to this product would be deleted")}!`
+            ? `${t('are you sure that you want to hide this product')}? ${t("all customers' cart items related to this product would be deleted")}!`
+            : `${t('are you sure that you want to show this product')}?`
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: title,
-            okText: isActive ? t('show in menu') : t('hide from menu'),
+            content: (
+                <div>
+                    <Divider style={{ margin: '10px 0', borderWidth: 2, borderColor: 'rgba(26, 26, 26, 0.12)' }} />
+                </div>
+            ),
+            okText: isActive ? t('hide from menu') : t('show in menu'),
             cancelText: t('cancel'),
             onOk: () => {
                 onDelete(productId)
@@ -72,13 +76,13 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
             <Table
                 className="product-table"
                 style={{ width: '100%' }}
-                rowKey={(record: IMilktea) => record.milkteaId as number}
+                rowKey={(record: IMilktea) => record.id as number}
                 onChange={onChange}
                 loading={isLoading}
                 columns={[
                     {
                         title: t('id') + ' ' + t('milktea').toLocaleLowerCase(),
-                        dataIndex: 'milkteaId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
@@ -208,7 +212,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                                         <>
                                             {priceEntries.map((entry, index) => (
                                                 <Tag color="green" key={index} style={{ marginRight: 0 }}>
-                                                    {entry[0]} -{' '}
+                                                    {entry[0].toUpperCase()} -{' '}
                                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
                                                         entry[1] as number
                                                     )}
@@ -235,24 +239,23 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
                                     <Button
                                         onClick={() => {
-                                            if (record.isActive) return
+                                            if (!record.isActive) return
                                             onUpdateBtnClick(record)
                                         }}
                                         shape="round"
                                         type="primary"
-                                        disabled={record.isActive}
+                                        disabled={!record.isActive}
                                     >
                                         {t('update')}
                                     </Button>
                                     <Button
-                                        onClick={() => onDeleteBtnClick(record.milkteaId as number, record.isActive)}
+                                        onClick={() => onDeleteBtnClick(record.id as number, record.isActive)}
                                         type="text"
                                         shape="round"
                                         danger
                                         style={{ border: '1px solid' }}
-                                        disabled={user.role !== 'Admin'}
                                     >
-                                        {record.isActive ? t('show in menu') : t('hide from menu')}
+                                        {record.isActive ? t('hide from menu') : t('show in menu')}
                                     </Button>
                                 </div>
                             )

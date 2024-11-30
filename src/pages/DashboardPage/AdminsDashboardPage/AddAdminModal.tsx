@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { Modal, Row, Col, Button, Form, Input, Upload, FormInstance, Avatar, Select } from 'antd'
-import { LoadingOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons'
+import { LoadingOutlined, MailOutlined, PhoneOutlined, PlusOutlined } from '@ant-design/icons'
 import { IAdmin } from '../../../types'
 import { buttonStyle, inputStyle, secondaryButtonStyle } from '../../../assets/styles/globalStyle'
 import useFiles from '../../../services/files'
@@ -69,7 +69,7 @@ export const AddUserForm = ({ form, onSubmit }: { form: FormInstance; onSubmit: 
 
     const handleUpload = ({ file }: UploadRequestOption<any>) => {
         uploadMutation.mutateAsync({ file, folder: 'avatar' }).then(res => {
-            const newUrl = res.data.data?.url
+            const newUrl = res.data.data?.imageUrl
             setAvatar(newUrl)
         })
     }
@@ -132,11 +132,24 @@ export const AddUserForm = ({ form, onSubmit }: { form: FormInstance; onSubmit: 
                         style={inputStyle}
                     />
                 </Form.Item>
-                <Form.Item name="gender" label={t('gender')} initialValue={'Male'}>
-                    <Select size="large">
-                        <Select.Option value="Male">{t('male')}</Select.Option>
-                        <Select.Option value="Female">{t('female')}</Select.Option>
-                    </Select>
+                <Form.Item
+                    name="phoneNumber"
+                    rules={[
+                        { required: true, message: t('required').toString() },
+                        { whitespace: true, message: t('required').toString() },
+                        {
+                            pattern: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+                            message: t('invalid phone number').toString()
+                        }
+                    ]}
+                >
+                    <Input
+                        size="large"
+                        prefix={<PhoneOutlined className="site-form-item-icon" style={{ transform: 'scaleX(-1)' }} />}
+                        spellCheck={false}
+                        placeholder={t('phone number') + '...'}
+                        style={inputStyle}
+                    />
                 </Form.Item>
             </Form>
         </>

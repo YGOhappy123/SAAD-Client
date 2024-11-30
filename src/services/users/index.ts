@@ -49,7 +49,7 @@ export default ({ enabledFetchUsers }: { enabledFetchUsers?: boolean }) => {
     const searchUsersQuery = useQuery(['search-users', query, sort, itemPerPage], {
         queryFn: () =>
             axios.get<IResponseData<ICustomer[]>>(
-                `/users/customers/?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
+                `/customers/?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
             ),
         keepPreviousData: true,
         onError: onError,
@@ -82,8 +82,7 @@ export default ({ enabledFetchUsers }: { enabledFetchUsers?: boolean }) => {
 
     const fetchUsersQuery = useQuery(['users', current, itemPerPage], {
         queryFn: () => {
-            if (!isSearching)
-                return axios.get<IResponseData<ICustomer[]>>(`/users/customers?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
+            if (!isSearching) return axios.get<IResponseData<ICustomer[]>>(`/customers?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
         },
         keepPreviousData: true,
         onError: onError,
@@ -109,7 +108,11 @@ export default ({ enabledFetchUsers }: { enabledFetchUsers?: boolean }) => {
     })
 
     const deleteUserMutation = useMutation({
-        mutationFn: (userId: number) => axios.post<IResponseData<unknown>>(`/auth/deactivate/${userId}`),
+        mutationFn: (userId: number) =>
+            axios.post<IResponseData<unknown>>(`/auth/deactivate-account`, {
+                targetUserId: userId,
+                targetUserRole: 'Customer'
+            }),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-users')

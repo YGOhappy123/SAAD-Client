@@ -42,7 +42,7 @@ export default function MilkteasDashboardPage() {
     const locale = getI18n().resolvedLanguage as 'vi' | 'en'
     useTitle(`${t('milkteas')} - PMT`)
 
-    const [shouldAddModalOpen, setAddModelOpen] = useState(false)
+    const [shouldAddModalOpen, setAddModalOpen] = useState(false)
     const [shouldUpdateModalOpen, setUpdateModalOpen] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState<IMilktea | null>(null)
     const [searchCategory, setSearchCategory] = useState<string>('')
@@ -52,7 +52,7 @@ export default function MilkteasDashboardPage() {
 
     const fetchAllCategoriesQuery = useQuery(['categories-all', query], {
         queryFn: () => {
-            return axios.get<IResponseData<ICategory[]>>(`/category/get?filter=${query}`)
+            return axios.get<IResponseData<ICategory[]>>(`/products/categories?filter=${query}`)
         },
         refetchOnWindowFocus: false,
         enabled: false,
@@ -61,11 +61,11 @@ export default function MilkteasDashboardPage() {
     const categories = fetchAllCategoriesQuery.data?.data || []
 
     const onAddProduct = (values: Partial<IMilktea>) => {
-        addProductMutation.mutateAsync(values).finally(() => setAddModelOpen(false))
+        addProductMutation.mutateAsync(values).then(() => setAddModalOpen(false))
     }
 
     const onUpdateProduct = async (values: Partial<IMilktea>) => {
-        await updateProductMutation.mutateAsync({ productId: selectedProduct?.milkteaId as number, data: values })
+        await updateProductMutation.mutateAsync({ productId: selectedProduct?.id as number, data: values }).then(() => setUpdateModalOpen(false))
     }
 
     const onDeleteProduct = (productId: number) => {
@@ -73,20 +73,23 @@ export default function MilkteasDashboardPage() {
     }
 
     const fetchAllProductsMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<IMilktea[]>>(`/product/getAllMilkTeas?sort=${JSON.stringify({ milkteaId: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<IMilktea[]>>(`/products/milkteas?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
         const { data } = await fetchAllProductsMutation.mutateAsync()
         const milkteas = data?.data.map(rawProduct => ({
-            [t('id').toString()]: rawProduct.milkteaId,
+            [t('id').toString()]: rawProduct.id,
             [t('created at')]: dayjs(rawProduct.createdAt).format('DD/MM/YYYY'),
             [t('name vi')]: rawProduct.nameVi,
             [t('name en')]: rawProduct.nameEn,
             [t('description vi')]: rawProduct.descriptionVi,
             [t('description en')]: rawProduct.descriptionEn,
             [t('unit price')]: Object.entries(rawProduct.price)
-                .map(item => `${item[0]}-${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item[1] as number)}`)
+                .map(
+                    item =>
+                        `${item[0].toUpperCase()}-${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item[1] as number)}`
+                )
                 .join(', '),
             [t('category')]: locale === 'vi' ? rawProduct.category?.nameVi : rawProduct.category?.nameEn,
             [t('is available') + '?']: rawProduct.isAvailable ? t('yes') : t('no')
@@ -138,11 +141,11 @@ export default function MilkteasDashboardPage() {
                 onSubmit={onAddProduct}
                 isLoading={addProductMutation.isLoading}
                 shouldOpen={shouldAddModalOpen}
-                categories={categories.filter(item => !item.isActive)}
+                categories={categories.filter(item => item.isActive)}
                 isLoadingCategory={fetchAllCategoriesQuery.isLoading}
                 onSearchCategory={value => setSearchCategory(value)}
                 onCategoryChange={() => setQuery('')}
-                onCancel={() => setAddModelOpen(false)}
+                onCancel={() => setAddModalOpen(false)}
             />
 
             <Col span={24}>
@@ -162,7 +165,7 @@ export default function MilkteasDashboardPage() {
                             </Col>
                             {user.role === 'Admin' && (
                                 <Col span={5}>
-                                    <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModelOpen(true)}>
+                                    <Button block shape="round" style={{ ...secondaryButtonStyle }} onClick={() => setAddModalOpen(true)}>
                                         <strong>+ {t('add')}</strong>
                                     </Button>
                                 </Col>

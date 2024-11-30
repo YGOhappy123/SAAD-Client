@@ -57,7 +57,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     const searchProductsQuery = useQuery(['search-products', query, sort], {
         queryFn: () =>
             axios.get<IResponseData<IMilktea[]>>(
-                `/product/getAllMilkTeas?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
+                `/products/milkteas?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}&filter=${query}&sort=${sort}`
             ),
         keepPreviousData: true,
         onError: onError,
@@ -91,7 +91,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     const fetchProductsQuery = useQuery(['products', current, itemPerPage], {
         queryFn: () => {
             if (!isSearching)
-                return axios.get<IResponseData<IMilktea[]>>(`/product/getAllMilkTeas?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
+                return axios.get<IResponseData<IMilktea[]>>(`/products/milkteas?skip=${itemPerPage * (current - 1)}&limit=${itemPerPage}`)
         },
         keepPreviousData: true,
         onError: onError,
@@ -109,7 +109,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     })
 
     const addProductMutation = useMutation({
-        mutationFn: (data: Partial<IMilktea>) => axios.post<IResponseData<IMilktea>>('/product/addMilktea', data),
+        mutationFn: (data: Partial<IMilktea>) => axios.post<IResponseData<IMilktea>>('/products/milkteas', data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')
@@ -122,7 +122,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
 
     const updateProductMutation = useMutation({
         mutationFn: ({ productId, data }: { productId: number; data: Partial<IMilktea> }) =>
-            axios.patch<IResponseData<IMilktea>>(`/product/updateMilktea/${productId}`, data),
+            axios.patch<IResponseData<IMilktea>>(`/products/milkteas/${productId}`, data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')
@@ -134,7 +134,7 @@ export default ({ enabledFetchProducts }: { enabledFetchProducts?: boolean }) =>
     })
 
     const toggleProductHiddenStatusMutation = useMutation({
-        mutationFn: (productId: number) => axios.patch<IResponseData<unknown>>(`/product/toggleMilktea/${productId}`),
+        mutationFn: (productId: number) => axios.post<IResponseData<unknown>>(`/products/milkteas/toggle-active/${productId}`),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-products')

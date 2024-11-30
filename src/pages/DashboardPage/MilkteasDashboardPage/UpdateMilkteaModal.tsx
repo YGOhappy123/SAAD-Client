@@ -50,11 +50,11 @@ export default function UpdateProductModal({
                 nameEn: product.nameEn,
                 descriptionVi: product.descriptionVi,
                 descriptionEn: product.descriptionEn,
-                category: { value: product.category?.categoryId },
+                category: { value: product.category?.id },
                 isAvailable: product.isAvailable ? true : false,
-                priceS: product.price?.S,
-                priceM: product.price?.M,
-                priceL: product.price?.L
+                priceS: product.price?.s,
+                priceM: product.price?.m,
+                priceL: product.price?.l
             })
         }
     }, [shouldOpen])
@@ -147,11 +147,9 @@ export const UpdateProductForm = ({
             isAvailable: values.isAvailable,
             categoryId: values.category.value,
             image: featuredImage,
-            price: {
-                S: values.priceS,
-                M: values.priceM,
-                L: values.priceL
-            }
+            priceS: values.priceS,
+            priceM: values.priceM,
+            priceL: values.priceL
         })
 
         await Promise.all(
@@ -172,7 +170,7 @@ export const UpdateProductForm = ({
         if (user.role !== 'Admin') return
         if (featuredImage) return
         uploadMutation.mutateAsync({ file, folder: 'product' }).then(res => {
-            setFeaturedImage(res.data.data?.url)
+            setFeaturedImage(res.data.data?.imageUrl)
         })
     }
 
@@ -180,9 +178,9 @@ export const UpdateProductForm = ({
         if (isLoadingCategory) return [{ key: 'loading', label: <Spin />, disabled: true }]
         else if (!categories?.length) return [{ key: 'empty', label: <Empty />, disabled: true }]
         return categories.map(category => ({
-            key: category.categoryId,
+            key: category.id,
             label: locale === 'vi' ? category.nameVi : category.nameEn,
-            value: category.categoryId
+            value: category.id
         }))
     }, [categories, isLoadingCategory])
 
@@ -257,13 +255,7 @@ export const UpdateProductForm = ({
                             { whitespace: true, message: t('required').toString() }
                         ]}
                     >
-                        <Input
-                            size="large"
-                            spellCheck={false}
-                            placeholder={t('name vi').toString()}
-                            style={inputStyle}
-                            disabled={user.role !== 'Admin'}
-                        />
+                        <Input size="large" spellCheck={false} placeholder={t('name vi').toString()} style={inputStyle} />
                     </Form.Item>
                     <Form.Item
                         label={t('name en')}
@@ -273,13 +265,7 @@ export const UpdateProductForm = ({
                             { whitespace: true, message: t('required').toString() }
                         ]}
                     >
-                        <Input
-                            size="large"
-                            spellCheck={false}
-                            placeholder={t('name en').toString()}
-                            style={inputStyle}
-                            disabled={user.role !== 'Admin'}
-                        />
+                        <Input size="large" spellCheck={false} placeholder={t('name en').toString()} style={inputStyle} />
                     </Form.Item>
                     <Form.Item
                         label={t('description vi')}
@@ -295,7 +281,6 @@ export const UpdateProductForm = ({
                             placeholder={t('description vi').toString()}
                             autoSize={{ minRows: 2, maxRows: 3 }}
                             style={inputStyle}
-                            disabled={user.role !== 'Admin'}
                         />
                     </Form.Item>
                     <Form.Item
@@ -312,7 +297,6 @@ export const UpdateProductForm = ({
                             placeholder={t('description en').toString()}
                             autoSize={{ minRows: 2, maxRows: 3 }}
                             style={inputStyle}
-                            disabled={user.role !== 'Admin'}
                         />
                     </Form.Item>
                     <label className="product-form-label">{t('price')}</label>
@@ -326,7 +310,6 @@ export const UpdateProductForm = ({
                                 placeholder={`${t('price')} size S`}
                                 style={inputStyle}
                                 min={0}
-                                disabled={user.role !== 'Admin'}
                             />
                         </Form.Item>
                         <Form.Item name="priceM" rules={[{ validator: validatePrices }]}>
@@ -338,7 +321,6 @@ export const UpdateProductForm = ({
                                 placeholder={`${t('price')} size M`}
                                 style={inputStyle}
                                 min={0}
-                                disabled={user.role !== 'Admin'}
                             />
                         </Form.Item>
                         <Form.Item name="priceL" rules={[{ validator: validatePrices }]}>
@@ -350,7 +332,6 @@ export const UpdateProductForm = ({
                                 placeholder={`${t('price')} size L`}
                                 style={inputStyle}
                                 min={0}
-                                disabled={user.role !== 'Admin'}
                             />
                         </Form.Item>
                     </Space>
@@ -364,7 +345,6 @@ export const UpdateProductForm = ({
                             size="large"
                             onChange={onCategoryChange}
                             options={categoryOptions}
-                            disabled={user.role !== 'Admin'}
                         ></Select>
                     </Form.Item>
                     <Form.Item name="isAvailable" label={`${t('in stock')}?`} initialValue={true}>

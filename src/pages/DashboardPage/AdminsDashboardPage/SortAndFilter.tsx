@@ -16,8 +16,8 @@ interface SortAndFilterProps {
 
 interface SortAndFilterChangeParams {
     searchEmail: string
+    searchPhone: string
     searchName: string
-    gender: string
     sort: string
     range: string[] | any[] | undefined
 }
@@ -26,7 +26,7 @@ export default function SortAndFilter({ onChange, onSearch, onReset }: SortAndFi
     const { t } = useTranslation()
     const [searchEmail, setSearchEmail] = useState<string>('')
     const [searchName, setSearchName] = useState<string>('')
-    const [gender, setGender] = useState<string>('All')
+    const [searchPhone, setSearchPhone] = useState<string>('')
     const [filterCount, setFilterCount] = useState<number>(0)
     const [sort, setSort] = useState<string>('-createdAt')
     const [rangePickerDate, setRangePickerDate] = useState<any[]>([])
@@ -41,7 +41,7 @@ export default function SortAndFilter({ onChange, onSearch, onReset }: SortAndFi
     const onInternalReset = () => {
         setSearchEmail('')
         setSearchName('')
-        setGender('All')
+        setSearchPhone('')
         setSort('-createdAt')
         setRangePickerDate([])
         setFilterCount(0)
@@ -50,14 +50,13 @@ export default function SortAndFilter({ onChange, onSearch, onReset }: SortAndFi
 
     const onInternalSearch = () => {
         onSearch()
-        if (!searchEmail && !searchName && gender === 'All' && sort === '-createdAt' && !range?.length) return setFilterCount(0)
+        if (!searchEmail && !searchName && !searchPhone && sort === '-createdAt' && !range?.length) return setFilterCount(0)
         setFilterCount(1)
     }
 
     useEffect(() => {
-        onChange({ searchEmail, searchName, gender, sort, range })
-    }, [searchEmail, searchName, gender, sort, range])
-
+        onChange({ searchEmail, searchName, searchPhone, sort, range })
+    }, [searchEmail, searchName, searchPhone, sort, range])
     const content = () => {
         return (
             <Row style={{ minWidth: '250px' }}>
@@ -71,6 +70,16 @@ export default function SortAndFilter({ onChange, onSearch, onReset }: SortAndFi
                                 allowClear
                                 placeholder={t('search').toString()}
                                 onChange={e => setSearchEmail(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <div>{t('search by phone number')}</div>
+                            <Input
+                                value={searchPhone}
+                                size="large"
+                                allowClear
+                                placeholder={t('search').toString()}
+                                onChange={e => setSearchPhone(e.target.value)}
                             />
                         </div>
                         <div>
@@ -92,14 +101,6 @@ export default function SortAndFilter({ onChange, onSearch, onReset }: SortAndFi
                                 style={{ width: '250px' }}
                                 onCalendarChange={onCalendarChange}
                             />
-                        </div>
-                        <div>
-                            <div>{t('search by gender')}</div>
-                            <Select value={gender} size="large" defaultValue="All" style={{ width: '100%' }} onChange={value => setGender(value)}>
-                                <Select.Option value="All">{t('all')}</Select.Option>
-                                <Select.Option value="Male">{t('male')}</Select.Option>
-                                <Select.Option value="Female">{t('female')}</Select.Option>
-                            </Select>
                         </div>
                         <div>
                             <div>{t('sort by order')}</div>

@@ -30,24 +30,6 @@ export interface ICustomer {
     isActive?: boolean
 }
 
-export interface IStaff {
-    staffId: number
-    firstName: string
-    lastName: string
-    createdAt: string
-
-    email: string
-    address: string
-    phoneNumber: string
-    avatar: string
-
-    gender: 'Male' | 'Female'
-    hireDate: string
-    monthlySalary: number
-    createdBy: number | string | null
-    isWorking?: boolean
-}
-
 export interface IAdmin {
     id: number
     firstName: string
@@ -58,6 +40,7 @@ export interface IAdmin {
     avatar?: string
     createdBy?: IAdmin | null
     createdById?: number | string | null
+    isActive?: boolean
 }
 
 export type IRole = 'Customer' | 'Admin'

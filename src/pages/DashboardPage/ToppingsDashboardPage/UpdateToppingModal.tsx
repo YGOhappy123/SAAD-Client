@@ -129,7 +129,7 @@ export const UpdateProductForm = ({
     const handleUpload = ({ file }: UploadRequestOption<any>) => {
         if (featuredImage) return
         uploadMutation.mutateAsync({ file, folder: 'product' }).then(res => {
-            setFeaturedImage(res.data.data?.url)
+            setFeaturedImage(res.data.data?.imageUrl)
         })
     }
 

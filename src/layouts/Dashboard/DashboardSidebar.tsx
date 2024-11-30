@@ -1,24 +1,19 @@
 import { FC, useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Layout, Menu } from 'antd'
 import {
     HomeOutlined,
     UserOutlined,
     LineChartOutlined,
-    TagsOutlined,
     ClusterOutlined,
     AuditOutlined,
     DeploymentUnitOutlined,
     CustomerServiceOutlined,
     TeamOutlined,
     ReconciliationOutlined,
-    RestOutlined,
-    SmileOutlined,
-    CrownOutlined
+    RestOutlined
 } from '@ant-design/icons'
-import { RootState } from '../../store'
 import type { MenuProps } from 'antd'
 
 const DashboardSidebar: FC = () => {
@@ -29,7 +24,6 @@ const DashboardSidebar: FC = () => {
     const [selectedKeys, setSelectedKeys] = useState<string[]>()
     const [openKeys, setOpenKeys] = useState<string[]>([])
     const [collapsed, setCollapsed] = useState<boolean>(false)
-    const user = useSelector((state: RootState) => state.auth.user)
 
     const onOpenChange: MenuProps['onOpenChange'] = keys => {
         const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1)
@@ -83,15 +77,8 @@ const DashboardSidebar: FC = () => {
         },
         {
             label: t('human resources'),
-            key: '/hr-management',
-            icon: <TeamOutlined />,
-            children: [
-                {
-                    label: t('admins'),
-                    key: '/admins',
-                    icon: <CrownOutlined />
-                }
-            ]
+            key: '/admins',
+            icon: <TeamOutlined />
         },
         {
             label: t('statistics'),

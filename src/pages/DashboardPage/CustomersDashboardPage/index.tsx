@@ -38,13 +38,13 @@ export default function CustomersDashboardPage() {
     }
 
     const fetchAllUsersMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<ICustomer[]>>(`/users/customers?sort=${JSON.stringify({ customerId: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<ICustomer[]>>(`/customers?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
         const { data } = await fetchAllUsersMutation.mutateAsync()
         const users = data?.data.map(rawUser => ({
-            [t('id').toString()]: rawUser.userId,
+            [t('id').toString()]: rawUser.id,
             [t('created at')]: dayjs(rawUser.createdAt).format('DD/MM/YYYY'),
             [t('last name')]: rawUser.lastName,
             [t('first name')]: rawUser.firstName,
