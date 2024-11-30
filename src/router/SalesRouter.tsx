@@ -17,11 +17,11 @@ const salesRouter = [
         children: [
             {
                 path: 'checkout',
-                element: <AuthProtector children={<CheckoutPage />} redirect="/auth" allowedRoles={['User']} />
+                element: <AuthProtector children={<CheckoutPage />} redirect="/auth" allowedRoles={['Customer']} />
             },
             {
                 path: 'thanks/:orderId',
-                element: <AuthProtector children={<ThankYouPage />} redirect="/auth" allowedRoles={['User']} />
+                element: <AuthProtector children={<ThankYouPage />} redirect="/auth" allowedRoles={['Customer']} />
             }
         ]
     }

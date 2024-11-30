@@ -1,8 +1,8 @@
 export interface ICategory {
-    categoryId?: number
+    id?: number
     nameVi: string
     nameEn: string
     icon?: string | null
     createdAt?: string
-    isHidden: boolean
+    isActive: boolean
 }

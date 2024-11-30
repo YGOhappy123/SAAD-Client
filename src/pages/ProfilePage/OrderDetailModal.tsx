@@ -60,7 +60,7 @@ const OrderDetailModal = ({ orderDetails, onClose }: IModalProps) => {
                         },
                         {
                             title: t('size'),
-                            dataIndex: 'sizeId',
+                            dataIndex: 'size',
                             align: 'center'
                         },
                         {
@@ -116,11 +116,11 @@ const OrderDetailModal = ({ orderDetails, onClose }: IModalProps) => {
                     <span className="bold-text">{t('status')}:</span>
                     <span className="bold-text">{t(orderDetails.status.toLocaleLowerCase())}</span>
                 </Row>
-                {orderDetails?.staff && (
+                {orderDetails?.processingStaff && (
                     <Row justify="space-between" align="middle">
                         <span className="bold-text">{t('staff in charge')}:</span>
                         <span>
-                            {orderDetails.staff.lastName} {orderDetails.staff.firstName}
+                            {orderDetails.processingStaff.lastName} {orderDetails.processingStaff.firstName}
                         </span>
                     </Row>
                 )}

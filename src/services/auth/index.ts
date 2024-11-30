@@ -19,11 +19,6 @@ interface SignInResponse {
     refreshToken: string
 }
 
-interface SignUpResponse {
-    username: string
-    password: string
-}
-
 export default () => {
     const { t } = useTranslation()
     const axios = useAxiosIns()
@@ -32,10 +27,9 @@ export default () => {
 
     const signInMutation = useMutation({
         mutationFn: (params: { account: { username: string; password: string }; showToastMessage?: boolean }) =>
-            axios.post<IResponseData<SignInResponse>>(`/auth/login`, params.account),
+            axios.post<IResponseData<SignInResponse>>(`/auth/sign-in`, params.account),
         onError: onError,
-        onSuccess: (res, variables) => {
-            const { showToastMessage = true } = variables
+        onSuccess: res => {
             const redirectPath = cookies.get('redirect_path') || '/'
             const { user, accessToken, refreshToken } = res.data.data
             cookies.set('access_token', accessToken, { path: '/', expires: new Date(dayjs(Date.now()).add(30, 'day').toISOString()) })
@@ -45,21 +39,25 @@ export default () => {
             dispatch(setLogged(true))
             dispatch(setUser(user))
             dispatch(resetAppState())
-
-            if (showToastMessage) {
-                toast(t(res.data.message), toastConfig('success'))
-            }
+            toast(t(res.data.message), toastConfig('success'))
         }
     })
 
     const signUpMutation = useMutation({
         mutationFn: (data: { username: string; password: string; firstName: string; lastName: string }) =>
-            axios.post<IResponseData<SignUpResponse>>('/auth/register', data),
+            axios.post<IResponseData<SignInResponse>>('/auth/sign-up', data),
         onError: onError,
         onSuccess: res => {
+            const redirectPath = cookies.get('redirect_path') || '/'
+            const { user, accessToken, refreshToken } = res.data.data
+            cookies.set('access_token', accessToken, { path: '/', expires: new Date(dayjs(Date.now()).add(30, 'day').toISOString()) })
+            cookies.set('refresh_token', refreshToken, { path: '/', expires: new Date(dayjs(Date.now()).add(30, 'day').toISOString()) })
+
+            navigate(redirectPath as string)
+            dispatch(setLogged(true))
+            dispatch(setUser(user))
+            dispatch(resetAppState())
             toast(t(res.data.message), toastConfig('success'))
-            const { username, password } = res.data.data
-            signInMutation.mutate({ account: { username, password }, showToastMessage: false })
         }
     })
 
@@ -89,7 +87,8 @@ export default () => {
     })
 
     const resetPasswordMutation = useMutation({
-        mutationFn: (data: { password: string; token: string }) => axios.post<IResponseData<SignUpResponse>>('/auth/reset-password', data),
+        mutationFn: (data: { resetPasswordToken: string; password: string; confirmPassword: string }) =>
+            axios.post<IResponseData<any>>('/auth/reset-password', data),
         onError: onError,
         onSuccess: res => {
             toast(t(res.data.message), toastConfig('success'))
@@ -98,7 +97,7 @@ export default () => {
 
     const deactivateAccountMutation = useMutation({
         mutationFn: (data: { password: string; customerId: number }) =>
-            axios.post<IResponseData<any>>(`/auth/deactivate/${data.customerId}`, { password: data.password }),
+            axios.post<IResponseData<any>>(`/auth/deactivate-account/${data.customerId}`, { password: data.password }),
         onError: onError,
         onSuccess: res => {
             toast(t(res.data.message), toastConfig('success'))
@@ -107,8 +106,8 @@ export default () => {
     })
 
     const updatePasswordMutation = useMutation({
-        mutationFn: ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) =>
-            axios.post<IResponseData<any>>(`/auth/change-password`, { currentPassword, newPassword }),
+        mutationFn: ({ oldPassword, newPassword, confirmPassword }: { oldPassword: string; newPassword: string; confirmPassword: string }) =>
+            axios.post<IResponseData<any>>(`/auth/change-password`, { oldPassword, newPassword, confirmPassword }),
         onSuccess: res => {
             toast(t(res.data.message), toastConfig('success'))
         },

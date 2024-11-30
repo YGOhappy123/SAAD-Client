@@ -14,7 +14,7 @@ interface IProps {
     onCancel: () => void
 }
 
-type MilkTeaSize = 'S' | 'M' | 'L'
+type MilkTeaSize = 's' | 'm' | 'l'
 
 const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) => {
     const { t } = useTranslation()
@@ -22,9 +22,9 @@ const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) =>
     const axios = useAxiosIns()
     const { addCartItemMutation } = useCartItems({ enabledFetchCartItems: false })
 
-    const DEFAULT_FILTER = { isAvailable: true, isHidden: false }
-    const fetchToppingsQuery = useQuery(['toppings'], {
-        queryFn: () => axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?filter=${JSON.stringify(DEFAULT_FILTER)}`),
+    const DEFAULT_FILTER = { isAvailable: true, isActive: true }
+    const fetchToppingsQuery = useQuery(['add-to-cart-toppings'], {
+        queryFn: () => axios.get<IResponseData<ITopping[]>>(`/products/toppings?filter=${JSON.stringify(DEFAULT_FILTER)}`),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
@@ -32,23 +32,23 @@ const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) =>
     })
     const toppings = fetchToppingsQuery.data?.data ?? []
 
-    const [chosenSize, setChosenSize] = useState<MilkTeaSize>('S')
+    const [chosenSize, setChosenSize] = useState<MilkTeaSize>('s')
     const [chosenToppings, setChosenToppings] = useState<ITopping[]>([])
     const [chosenQuantity, setChosenQuantity] = useState(1)
 
     const availableSizes = useMemo(() => {
         const sizes = []
-        if (product?.price?.S != null) sizes.push('S')
-        if (product?.price?.M != null) sizes.push('M')
-        if (product?.price?.L != null) sizes.push('L')
+        if (product?.price?.s != null) sizes.push('s')
+        if (product?.price?.m != null) sizes.push('m')
+        if (product?.price?.l != null) sizes.push('l')
         return sizes
     }, [product])
 
     const handleChooseTopping = useCallback(
         (topping: ITopping) => {
-            const isExist = chosenToppings.some(item => item.toppingId === topping.toppingId)
+            const isExist = chosenToppings.some(item => item.id === topping.id)
             if (isExist) {
-                setChosenToppings(prev => prev.filter(item => item.toppingId !== topping.toppingId))
+                setChosenToppings(prev => prev.filter(item => item.id !== topping.id))
             } else {
                 setChosenToppings(prev => [...prev, topping])
             }
@@ -79,9 +79,9 @@ const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) =>
     const addItemToCart = () => {
         addCartItemMutation
             .mutateAsync({
-                milkteaId: product?.milkteaId as number,
-                size: chosenSize,
-                toppings: chosenToppings.map(item => item.toppingId).sort() as number[],
+                milkteaId: product?.id as number,
+                size: chosenSize.toUpperCase(),
+                toppings: chosenToppings.map(item => item.id).sort() as number[],
                 quantity: chosenQuantity
             })
             .finally(() => {
@@ -160,7 +160,7 @@ const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) =>
                                 onChange={() => setChosenSize(size as MilkTeaSize)}
                             />
                             <span>
-                                {size}
+                                {size.toUpperCase()}
                                 {' - '}
                                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price[size] as number)}
                             </span>
@@ -171,12 +171,12 @@ const AddToCartModal = ({ shouldOpen, product, isLoading, onCancel }: IProps) =>
                 <h4 className="title">{t('choose toppings')}</h4>
                 <div className="values-group">
                     {toppings.map(topping => (
-                        <label key={topping.toppingId} className="item wfull" htmlFor={topping.toppingId?.toString()}>
+                        <label key={topping.id} className="item wfull" htmlFor={topping.id?.toString()}>
                             <input
                                 type="checkbox"
                                 name="topping"
-                                id={topping.toppingId?.toString()}
-                                checked={chosenToppings.some(item => item.toppingId === topping.toppingId)}
+                                id={topping.id?.toString()}
+                                checked={chosenToppings.some(item => item.id === topping.id)}
                                 onChange={() => handleChooseTopping(topping)}
                             />
                             <span>{topping.nameVi}</span>

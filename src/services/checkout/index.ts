@@ -7,7 +7,7 @@ export default () => {
     const axios = useAxiosIns()
 
     const checkoutMutation = useMutation({
-        mutationFn: (payload: { items: Partial<ICartItem>[]; note?: string }) => axios.post<IResponseData<any>>(`/orders/create-order`, payload),
+        mutationFn: (payload: { items: Partial<ICartItem>[]; note?: string }) => axios.post<IResponseData<number>>(`/orders/create-order`, payload),
         onError: onError,
         onSuccess: res => {}
     })

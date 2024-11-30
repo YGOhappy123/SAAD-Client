@@ -31,17 +31,17 @@ const ChangeAvatarPage: FC = () => {
 
     const handleUpload = ({ file }: UploadRequestOption<any>) => {
         uploadMutation.mutateAsync({ file, folder: 'avatar' }).then(res => {
-            setAvatar(res.data.data?.url)
+            setAvatar(res.data.data?.imageUrl)
         })
     }
 
     const updateAvatar = () => {
-        if (user.role === 'User') {
-            updateProfileMutation.mutateAsync({ data: { avatar } }).then(() => {
+        if (user.role === 'Customer') {
+            updateProfileMutation.mutateAsync({ data: { ...user, avatar } }).then(() => {
                 dispatch(setUser({ ...user, avatar }))
             })
         } else {
-            updateAdminMutation.mutateAsync({ adminId: user.userId, data: { avatar } }).then(() => {
+            updateAdminMutation.mutateAsync({ data: { ...user, avatar } }).then(() => {
                 dispatch(setUser({ ...user, avatar }))
             })
         }

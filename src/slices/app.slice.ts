@@ -14,7 +14,7 @@ const initialState: AppState = {
 
 export const fetchCartItems = createAsyncThunk('users/fetchCartItems', async (axios: Axios, { rejectWithValue }) => {
     try {
-        const response = await axios.get<IResponseData<ICartItem[]>>(`/users/cart/get-items`)
+        const response = await axios.get<IResponseData<ICartItem[]>>(`/customers/cart/get-items`)
         return response.data
     } catch (error: any) {
         return rejectWithValue(error.response.data)
@@ -28,7 +28,7 @@ export const addCartItem = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-            const response = await axios.post<IResponseData<ICartItem[]>>(`/users/cart/add-item`, { milkteaId, size, toppings, quantity })
+            const response = await axios.post<IResponseData<ICartItem[]>>(`/customers/cart/add-item`, { milkteaId, size, toppings, quantity })
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -43,7 +43,7 @@ export const updateCartItem = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-            const response = await axios.post<IResponseData<any>>(`/users/cart/update-item`, { cartItemId, quantity, type })
+            const response = await axios.patch<IResponseData<any>>(`/customers/cart/update-item/${cartItemId}`, { quantity, type })
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -55,7 +55,7 @@ export const removeCartItem = createAsyncThunk(
     'users/removeCartItem',
     async ({ axios, cartItemId }: { axios: Axios; cartItemId: number }, { rejectWithValue }) => {
         try {
-            const response = await axios.post<IResponseData<any>>(`/users/cart/remove-item`, { cartItemId })
+            const response = await axios.delete<IResponseData<any>>(`/customers/cart/remove-item/${cartItemId}`)
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response.data)
@@ -65,7 +65,7 @@ export const removeCartItem = createAsyncThunk(
 
 export const resetCartItems = createAsyncThunk('users/resetCartItems', async (axios: Axios, { rejectWithValue }) => {
     try {
-        const response = await axios.post<IResponseData<any>>(`/users/cart/reset`)
+        const response = await axios.post<IResponseData<any>>(`/customers/cart/reset`)
         return response.data
     } catch (error: any) {
         return rejectWithValue(error.response.data)

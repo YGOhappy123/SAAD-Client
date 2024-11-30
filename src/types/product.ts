@@ -1,7 +1,7 @@
 import { ICategory } from './category'
 
 export interface IMilktea {
-    milkteaId?: number
+    id?: number
     nameVi: string
     nameEn: string
     descriptionVi: string
@@ -13,7 +13,7 @@ export interface IMilktea {
     isAvailable: boolean
     categoryId?: string
     createdAt: string
-    isHidden: boolean
+    isActive: boolean
 
     category?: Partial<ICategory>
     soldUnitsToday?: number
@@ -23,7 +23,7 @@ export interface IMilktea {
 }
 
 export interface ITopping {
-    toppingId?: number
+    id?: number
     nameVi: string
     nameEn: string
     descriptionVi: string
@@ -32,16 +32,16 @@ export interface ITopping {
     image: string | null
     isAvailable: boolean
     createdAt: string
-    isHidden: boolean
+    isActive: boolean
 }
 
 export type IProduct = IMilktea | ITopping
 
 export interface ICartItem {
-    cartItemId: number
+    id: number
     userId?: number
     milkteaId: number
-    sizeId: string
+    size: string
     quantity: number
 
     milktea?: Partial<IMilktea>

@@ -17,17 +17,17 @@ const MilkteaCard = ({ product, handleClick }: IProps) => {
     const locale = getI18n().resolvedLanguage as 'vi' | 'en'
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const minPrice = (product.price?.S ?? product.price?.M ?? product.price?.L) as number
-    const maxPrice = (product.price?.L ?? product.price?.M ?? product.price?.S) as number
+    const minPrice = (product.price?.s ?? product.price?.m ?? product.price?.l) as number
+    const maxPrice = (product.price?.l ?? product.price?.m ?? product.price?.s) as number
 
     return (
         <div className="menu-card-wrapper">
             <div className="menu-card">
                 <div className="image-wrapper">
-                    <img src={product.image ?? 'alt-feature-img.png'} className="image" onClick={() => navigate(`/product/${product.milkteaId}`)} />
+                    <img src={product.image ?? 'alt-feature-img.png'} className="image" onClick={() => navigate(`/product/${product.id}`)} />
                 </div>
                 <div className="description">
-                    <h5 className="name" onClick={() => navigate(`/product/${product.milkteaId}`)}>
+                    <h5 className="name" onClick={() => navigate(`/product/${product.id}`)}>
                         {locale === 'vi' ? product.nameVi : product.nameEn}
                     </h5>
                     <p>{locale === 'vi' ? product.descriptionVi : product.descriptionEn}</p>
@@ -36,7 +36,7 @@ const MilkteaCard = ({ product, handleClick }: IProps) => {
                             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(minPrice)}
                             {maxPrice > minPrice && ` - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(maxPrice)}`}
                         </h6>
-                        {(!user || user.role === 'User') && (
+                        {(!user || user.role === 'Customer') && (
                             <Tooltip title={t('add to cart')} placement="bottom">
                                 <Button
                                     type="primary"

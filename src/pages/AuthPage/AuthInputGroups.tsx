@@ -23,7 +23,7 @@ const SignInInputs: FC<FormProps> = ({ setFormType, isLoading }) => {
                 rules={[
                     { required: true, message: t('please enter your username').toString() },
                     { whitespace: true, message: t('please enter your username').toString() },
-                    { max: 25, min: 8, message: t('your username must be between 8 and 25 in length').toString() }
+                    { max: 20, min: 8, message: t('your username must be between 8 and 20 in length').toString() }
                 ]}
             >
                 <Input
@@ -38,7 +38,7 @@ const SignInInputs: FC<FormProps> = ({ setFormType, isLoading }) => {
                 name="password"
                 rules={[
                     { required: true, message: t('please enter your password').toString() },
-                    { max: 25, min: 6, message: t('your password must be between 6 and 25 in length').toString() }
+                    { max: 20, min: 8, message: t('your password must be between 8 and 20 in length').toString() }
                 ]}
             >
                 <Input.Password
@@ -99,7 +99,7 @@ const SignUpInputs: FC<FormProps> = ({ isLoading }) => {
                 rules={[
                     { required: true, message: t('please enter your username').toString() },
                     { whitespace: true, message: t('please enter your username').toString() },
-                    { max: 25, min: 8, message: t('your username must be between 8 and 25 in length').toString() }
+                    { max: 20, min: 8, message: t('your username must be between 8 and 20 in length').toString() }
                 ]}
             >
                 <Input
@@ -115,7 +115,7 @@ const SignUpInputs: FC<FormProps> = ({ isLoading }) => {
                     name="password"
                     rules={[
                         { required: true, message: t('please enter your password').toString() },
-                        { max: 25, min: 6, message: t('your password must be between 6 and 25 in length').toString() }
+                        { max: 20, min: 8, message: t('your password must be between 8 and 20 in length').toString() }
                     ]}
                 >
                     <Input.Password
@@ -126,7 +126,7 @@ const SignUpInputs: FC<FormProps> = ({ isLoading }) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    name="cf-password"
+                    name="confirmPassword"
                     rules={[
                         { required: true, message: t('please enter your password').toString() },
                         ({ getFieldValue }) => ({
@@ -217,7 +217,7 @@ const ResetInputs: FC<FormProps> = ({ isLoading }) => {
                 name="password"
                 rules={[
                     { required: true, message: t('please enter your password').toString() },
-                    { max: 25, min: 6, message: t('your password must be between 6 and 25 in length').toString() }
+                    { max: 20, min: 8, message: t('your password must be between 8 and 20 in length').toString() }
                 ]}
             >
                 <Input.Password
@@ -228,7 +228,7 @@ const ResetInputs: FC<FormProps> = ({ isLoading }) => {
                 />
             </Form.Item>
             <Form.Item
-                name="cf-password"
+                name="confirmPassword"
                 rules={[
                     { required: true, message: t('please enter your password').toString() },
                     ({ getFieldValue }) => ({

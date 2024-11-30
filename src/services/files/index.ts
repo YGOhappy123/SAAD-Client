@@ -9,7 +9,7 @@ export default () => {
         mutationFn: ({ file, folder }: { file: string | Blob | RcFile; folder: string }) => {
             const form = new FormData()
             form.append('file', file)
-            return axios.postForm(`/files/upload/image/single?folder=${folder}`, form, {
+            return axios.postForm(`/file/upload-image?folder=${folder}`, form, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -19,7 +19,7 @@ export default () => {
     })
 
     const deleteMutation = useMutation({
-        mutationFn: (url: string) => axios.post('/files/delete/image/single', { url }),
+        mutationFn: (imageUrl: string) => axios.post('/file/delete-image', { imageUrl }),
         onError: onError
     })
 

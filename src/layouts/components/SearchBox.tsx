@@ -36,7 +36,7 @@ const SearchBox = ({}: IProps) => {
     }, [])
 
     const searchProducts = useQuery(['navbar-search-products'], {
-        queryFn: () => axios.post<IResponseData<IMilktea[]>>('/product/search-milkteas', { searchTerm: debouncedSearchTerm }),
+        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/products/milkteas/search?searchTerm=${debouncedSearchTerm}`),
         enabled: false,
         onSuccess: res => {
             setSearchResult(res.data?.data)
@@ -123,13 +123,13 @@ const SearchBox = ({}: IProps) => {
                     {searchResult.length > 0 &&
                         !isTyping &&
                         searchResult.map((product: IMilktea, index: number) => (
-                            <div key={product.milkteaId}>
+                            <div key={product.id}>
                                 <div
                                     onClick={() => {
                                         setSearchTerm('')
                                         setSearchResult([])
                                         setInputFocusing(false)
-                                        navigate(`/product/${product.milkteaId}`)
+                                        navigate(`/product/${product.id}`)
                                     }}
                                     className="search-result-item"
                                 >
@@ -140,7 +140,7 @@ const SearchBox = ({}: IProps) => {
                                             <p style={{ margin: 0 }}>
                                                 {t('price')}:{' '}
                                                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                                                    (product.price?.S || product.price?.M || product.price?.L) as number
+                                                    (product.price?.s || product.price?.m || product.price?.l) as number
                                                 )}
                                                 {' /1'}
                                             </p>

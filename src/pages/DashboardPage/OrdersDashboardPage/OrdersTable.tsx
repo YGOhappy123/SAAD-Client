@@ -32,7 +32,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
         if (type === 'Accepted' && order.status !== 'Pending') return
         if (type === 'Done' && ((order.status !== 'Pending' && order.staffId !== user.userId) || order.status !== 'Accepted')) return
 
-        updateOrderStatusMutation.mutate({ orderId: order.orderId, newStatus: type })
+        updateOrderStatusMutation.mutate({ orderId: order.id, newStatus: type })
     }
 
     let rejectionReason = ''
@@ -66,7 +66,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                 }
 
                 rejectOrderStatusMutation.mutate({
-                    orderId: order.orderId,
+                    orderId: order.id,
                     rejectionReason: rejectionReason.trim()
                 })
             },
@@ -92,7 +92,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
         <>
             <Table
                 style={{ width: '100%' }}
-                rowKey={(record: IOrder) => record.orderId}
+                rowKey={(record: IOrder) => record.id}
                 onChange={onChange}
                 loading={isLoading}
                 columns={[
@@ -146,7 +146,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ current, setCurrent, isLoading, ord
                                 {items.map((item, index) => (
                                     <div key={index} className="dashboard-order-item">
                                         <p>
-                                            {t('product')}: {locale === 'vi' ? item.nameVi : item.nameEn} ({t('size')} {item.sizeId}) x{' '}
+                                            {t('product')}: {locale === 'vi' ? item.nameVi : item.nameEn} ({t('size')} {item.size}) x{' '}
                                             {`${item.quantity}`.padStart(2, '0')}
                                         </p>
                                         <p>

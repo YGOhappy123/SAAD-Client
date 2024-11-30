@@ -138,7 +138,7 @@ export default function MilkteasDashboardPage() {
                 onSubmit={onAddProduct}
                 isLoading={addProductMutation.isLoading}
                 shouldOpen={shouldAddModalOpen}
-                categories={categories.filter(item => !item.isHidden)}
+                categories={categories.filter(item => !item.isActive)}
                 isLoadingCategory={fetchAllCategoriesQuery.isLoading}
                 onSearchCategory={value => setSearchCategory(value)}
                 onCategoryChange={() => setQuery('')}

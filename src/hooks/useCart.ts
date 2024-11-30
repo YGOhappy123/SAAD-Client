@@ -20,7 +20,7 @@ const useCart = () => {
     const axios = useAxiosIns()
 
     const fetchMilkteasQuery = useQuery(['products'], {
-        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/product/getAllMilkTeas?filter=${JSON.stringify({ isHidden: false })}`),
+        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/products/milkteas?filter=${JSON.stringify({ isActive: true })}`),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
@@ -28,7 +28,7 @@ const useCart = () => {
     })
 
     const fetchToppingsQuery = useQuery(['toppings'], {
-        queryFn: () => axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?filter=${JSON.stringify({ isHidden: false })}`),
+        queryFn: () => axios.get<IResponseData<ITopping[]>>(`/products/toppings?filter=${JSON.stringify({ isActive: true })}`),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
@@ -42,13 +42,13 @@ const useCart = () => {
         if (milkteas.length === 0 || toppings.length === 0) return DEFAULT_CART_VALUES
 
         return cartItems.reduce((acc: ICartValues, item: ICartItem) => {
-            const mt = milkteas.find(mt => mt.milkteaId === item.milkteaId) as IMilktea
-            const tps = item.toppings?.map(tp => toppings.find(_tp => _tp.toppingId === tp)) as ITopping[]
+            const mt = milkteas.find(mt => mt.id === item.milkteaId) as IMilktea
+            const tps = item.toppings?.map(tp => toppings.find(_tp => _tp.id === tp)) as ITopping[]
 
             if (!mt || tps.some(tp => !tp)) return acc
             const qty = mt.isAvailable ? item.quantity : 0
 
-            const milkteaPrice = mt.price[item.sizeId] as number
+            const milkteaPrice = mt.price[item.size.toLowerCase()] as number
             const toppingsPrice = tps.reduce((_acc, _tp) => _acc + _tp.price, 0)
 
             return {

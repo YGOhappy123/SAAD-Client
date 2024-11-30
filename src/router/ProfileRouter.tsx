@@ -10,7 +10,7 @@ const profileRouter = [
         path: '/profile',
         element: (
             <Suspense>
-                <AuthProtector children={<MainLayout />} redirect="/auth" allowedRoles={['User', 'Admin']} />
+                <AuthProtector children={<MainLayout />} redirect="/auth" allowedRoles={['Customer', 'Admin']} />
             </Suspense>
         ),
         errorElement: <ErrorPage />,
@@ -33,7 +33,7 @@ const profileRouter = [
             },
             {
                 path: 'orders',
-                element: <AuthProtector children={<MyOrdersPage />} redirect="/auth" allowedRoles={['User']} />
+                element: <AuthProtector children={<MyOrdersPage />} redirect="/auth" allowedRoles={['Customer']} />
             }
         ]
     }

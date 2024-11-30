@@ -48,7 +48,7 @@ const AuthPage: FC = () => {
             toast(t('you can only use this feature though the link that is attached to the email'), toastConfig('info'))
             return
         }
-        await resetPasswordMutation.mutateAsync({ password: values.password, token })
+        await resetPasswordMutation.mutateAsync({ ...values, resetPasswordToken: token })
         form.resetFields()
         query.delete('token')
         query.set('type', 'signIn')

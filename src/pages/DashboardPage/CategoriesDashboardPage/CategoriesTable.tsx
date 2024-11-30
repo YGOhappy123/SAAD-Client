@@ -34,10 +34,10 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
     const { t } = useTranslation()
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const onDeleteBtnClick = (categoryId: number, isHidden: number | boolean) => {
+    const onDeleteBtnClick = (categoryId: number, isActive: number | boolean) => {
         if (user.role !== 'Admin') return
 
-        const title = isHidden
+        const title = isActive
             ? `${t('are you sure that you want to show this category')}?`
             : `${t('are you sure that you want to hide this category')}? ${t(
                   "all milkteas and customers' cart items related to this category would be hidden as well"
@@ -46,7 +46,7 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: title,
-            okText: isHidden ? t('show in menu') : t('hide from menu'),
+            okText: isActive ? t('show in menu') : t('hide from menu'),
             cancelText: t('cancel'),
             onOk: () => {
                 onDelete(categoryId)
@@ -143,24 +143,24 @@ const CategoriesTable: FC<CategoriesTableProps> = ({
                                     <Space size="middle">
                                         <Button
                                             onClick={() => {
-                                                if (record.isHidden) return
+                                                if (record.isActive) return
                                                 onUpdateBtnClick(record)
                                             }}
                                             shape="round"
                                             type="primary"
-                                            disabled={user.role !== 'Admin' || record.isHidden}
+                                            disabled={user.role !== 'Admin' || record.isActive}
                                         >
                                             {t('edit')}
                                         </Button>
                                         <Button
-                                            onClick={() => onDeleteBtnClick(record?.categoryId as number, record.isHidden)}
+                                            onClick={() => onDeleteBtnClick(record?.categoryId as number, record.isActive)}
                                             type="text"
                                             shape="round"
                                             danger
                                             disabled={user.role !== 'Admin'}
                                             style={{ border: '1px solid' }}
                                         >
-                                            {record.isHidden ? t('show in menu') : t('hide from menu')}
+                                            {record.isActive ? t('show in menu') : t('hide from menu')}
                                         </Button>
                                     </Space>
                                 </>

@@ -1,28 +1,28 @@
-import { ICustomer, IStaff } from './auth'
+import { IAdmin, ICustomer, IStaff } from './auth'
 import { IMilktea, ITopping } from './product'
 
 export interface IOrder {
-    orderId: number
+    id: number
     customerId: number
     totalPrice: number
     note?: string
     createdAt: string
 
-    staffId?: number
+    processingStaffId?: number
     rejectionReason?: string
     status: OrderStatus
     updatedAt: string
 
     customer?: Partial<ICustomer>
     items?: IOrderItem[]
-    staff?: Partial<IStaff>
+    processingStaff?: Partial<IAdmin>
 }
 
 export type IOrderItem = {
-    orderItemId?: number
+    id?: number
     orderId?: number
     milkteaId: number
-    sizeId: string
+    size: string
     quantity: number
     price: number
 
@@ -31,7 +31,7 @@ export type IOrderItem = {
 
 export type IOrderItemTopping = {
     orderItemId?: number
-    toppingId: number
+    id: number
     price: number
 } & Partial<ITopping>
 

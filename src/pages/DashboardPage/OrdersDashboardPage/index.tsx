@@ -40,11 +40,11 @@ export default function UsersDashboardPage() {
     const onExportToCSV = async () => {
         const { data } = await fetchAllOrdersMutation.mutateAsync()
         const orders = data?.data.map(rawOrder => ({
-            [t('id').toString()]: rawOrder.orderId,
+            [t('id').toString()]: rawOrder.id,
             [t('created at')]: dayjs(rawOrder.createdAt).format('DD/MM/YYYY'),
             [t('customer')]: `${rawOrder.customer?.lastName} ${rawOrder.customer?.firstName}`,
             [t('items')]: rawOrder.items
-                ?.map(item => `${locale === 'vi' ? item.nameVi : item.nameEn} (Size ${item.sizeId} x ${item.quantity})`)
+                ?.map(item => `${locale === 'vi' ? item.nameVi : item.nameEn} (Size ${item.size} x ${item.quantity})`)
                 .join('; '),
             [t('total price')]: `${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(rawOrder.totalPrice)}`,
             [t('note')]: rawOrder.note ?? t('none'),

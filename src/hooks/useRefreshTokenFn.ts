@@ -22,7 +22,7 @@ const useRefreshTokenFn = (axiosIns: AxiosInstance) => {
     const refreshTokenFn = async (refreshToken: string) =>
         new Promise<string | null>((resolve, reject) => {
             axiosIns({
-                url: '/auth/refresh',
+                url: '/auth/refresh-token',
                 method: 'POST',
                 validateStatus: null,
                 data: {

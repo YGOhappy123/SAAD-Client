@@ -49,7 +49,7 @@ const CartPage = () => {
                                         <div className="cart-items">
                                             <Table
                                                 pagination={false}
-                                                rowKey={(record: ICartItem) => record.cartItemId}
+                                                rowKey={(record: ICartItem) => record.id}
                                                 columns={[
                                                     {
                                                         title: t('feature image'),
@@ -101,7 +101,7 @@ const CartPage = () => {
                                                     },
                                                     {
                                                         title: t('size'),
-                                                        dataIndex: 'sizeId',
+                                                        dataIndex: 'size',
                                                         align: 'center',
                                                         width: 80,
                                                         render: value => {
@@ -141,10 +141,10 @@ const CartPage = () => {
                                                                             if (quantity === 0) return
                                                                             if (newValue === 0)
                                                                                 return removeCartItemMutation.mutate({
-                                                                                    cartItemId: record.cartItemId
+                                                                                    cartItemId: record.id
                                                                                 })
                                                                             return updateCartItemMutation.mutate({
-                                                                                cartItemId: record.cartItemId,
+                                                                                cartItemId: record.id,
                                                                                 quantity: Math.abs(quantity),
                                                                                 type: quantity > 0 ? 'increase' : 'decrease'
                                                                             })
@@ -157,9 +157,7 @@ const CartPage = () => {
                                                                             shape="circle"
                                                                             loading={removeCartItemMutation.isLoading}
                                                                             icon={<DeleteOutlined />}
-                                                                            onClick={() =>
-                                                                                removeCartItemMutation.mutate({ cartItemId: record.cartItemId })
-                                                                            }
+                                                                            onClick={() => removeCartItemMutation.mutate({ cartItemId: record.id })}
                                                                         />
                                                                     </Tooltip>
                                                                 </div>

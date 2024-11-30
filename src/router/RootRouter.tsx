@@ -32,7 +32,7 @@ const rootRouter = [
             },
             {
                 path: 'cart',
-                element: <AuthProtector children={<CartPage />} redirect="/auth" allowedRoles={['User']} />
+                element: <AuthProtector children={<CartPage />} redirect="/auth" allowedRoles={['Customer']} />
             },
             {
                 path: 'product/:productId',

@@ -51,7 +51,7 @@ export default function ToppingsDashboardPage() {
     }
 
     const onUpdateProduct = (values: Partial<ITopping>) => {
-        updateProductMutation.mutateAsync({ productId: selectedProduct?.toppingId as number, data: values }).finally(() => setUpdateModalOpen(false))
+        updateProductMutation.mutateAsync({ productId: selectedProduct?.id as number, data: values }).finally(() => setUpdateModalOpen(false))
     }
 
     const onDeleteProduct = (productId: number) => {
@@ -59,13 +59,13 @@ export default function ToppingsDashboardPage() {
     }
 
     const fetchAllProductsMutation = useMutation({
-        mutationFn: () => axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?sort=${JSON.stringify({ toppingId: 'ASC' })}`)
+        mutationFn: () => axios.get<IResponseData<ITopping[]>>(`/product/getAllToppings?sort=${JSON.stringify({ id: 'ASC' })}`)
     })
 
     const onExportToCSV = async () => {
         const { data } = await fetchAllProductsMutation.mutateAsync()
         const toppings = data?.data.map(rawProduct => ({
-            [t('id').toString()]: rawProduct.toppingId,
+            [t('id').toString()]: rawProduct.id,
             [t('created at')]: dayjs(rawProduct.createdAt).format('DD/MM/YYYY'),
             [t('name vi')]: rawProduct.nameVi,
             [t('name en')]: rawProduct.nameEn,

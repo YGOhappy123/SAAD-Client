@@ -19,8 +19,12 @@ const ChangePasswordPage: FC = () => {
 
     const onFinish = (values: any) => {
         updatePasswordMutation
-            .mutateAsync({ currentPassword: values.currentPassword, newPassword: values.newPassword })
-            .then(res => form.resetFields())
+            .mutateAsync({
+                oldPassword: values.oldPassword,
+                newPassword: values.newPassword,
+                confirmPassword: values.confirmPassword
+            })
+            .then(() => form.resetFields())
     }
 
     return (
@@ -33,10 +37,7 @@ const ChangePasswordPage: FC = () => {
                         <Form form={form} layout="vertical" onFinish={onFinish}>
                             <h3 className="form-heading">{t('change password')}</h3>
 
-                            <Form.Item
-                                name="currentPassword"
-                                rules={[{ required: true, message: t('please enter your current password').toString() }]}
-                            >
+                            <Form.Item name="oldPassword" rules={[{ required: true, message: t('please enter your current password').toString() }]}>
                                 <Input.Password size="large" placeholder={t('current password...').toString()} style={inputStyle} />
                             </Form.Item>
 
@@ -44,7 +45,7 @@ const ChangePasswordPage: FC = () => {
                                 name="newPassword"
                                 rules={[
                                     { required: true, message: t('please enter your new password').toString() },
-                                    { max: 25, min: 6, message: t('your password must be between 6 and 25 in length').toString() }
+                                    { max: 25, min: 6, message: t('your password must be between 8 and 20 in length').toString() }
                                 ]}
                             >
                                 <Input.Password size="large" placeholder={t('new password...').toString()} style={inputStyle} />

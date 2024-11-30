@@ -20,7 +20,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
     const axios = useAxiosIns()
     const navigate = useNavigate()
 
-    const DEFAULT_FILTER = { isAvailable: true, isHidden: false }
+    const DEFAULT_FILTER = { isAvailable: true, isActive: true }
     const [limit, setLimit] = useState<number | null>(6)
     const [prevLocale, setPrevLocale] = useState<'vi' | 'en'>()
     const [searchProductQuery, setSearchProductQuery] = useState<string>('')
@@ -29,7 +29,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
     const [openAddToCartModal, setOpenAddToCartModal] = useState(false)
 
     const fetchCategoriesQuery = useQuery(['menu-categories'], {
-        queryFn: () => axios.get<IResponseData<ICategory[]>>(`/category/get?filter=${JSON.stringify({ isHidden: false })}`),
+        queryFn: () => axios.get<IResponseData<ICategory[]>>(`/products/categories?filter=${JSON.stringify({ isActive: true })}`),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
@@ -37,7 +37,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
     })
 
     const fetchProductsQuery = useQuery(['menu-products', limit, searchProductQuery], {
-        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/product/getAllMilkTeas?filter=${searchProductQuery}&limit=${limit}`),
+        queryFn: () => axios.get<IResponseData<IMilktea[]>>(`/products/milkteas?filter=${searchProductQuery}&limit=${limit}`),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 10000,
@@ -57,7 +57,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
     useEffect(() => {
         const activeCategory = categories?.find(category => (locale === 'vi' ? category.nameVi : category.nameEn) === categoryQuery.get('category'))
         if (activeCategory) {
-            setSearchProductQuery(JSON.stringify({ categoryId: activeCategory.categoryId, ...DEFAULT_FILTER }))
+            setSearchProductQuery(JSON.stringify({ categoryId: activeCategory.id, ...DEFAULT_FILTER }))
         } else {
             setSearchProductQuery(JSON.stringify({ ...DEFAULT_FILTER }))
         }
@@ -100,7 +100,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
                                 className={`filters-item ${
                                     categoryQuery.get('category') === (locale === 'vi' ? value.nameVi : value.nameEn) ? 'active' : ''
                                 }`}
-                                key={value.categoryId}
+                                key={value.id}
                                 onClick={() => {
                                     setCategoryQuery({ category: locale === 'vi' ? value.nameVi : value.nameEn })
                                 }}
@@ -125,7 +125,7 @@ const Menu: FC<IProps> = ({ isMenuPage }) => {
 
                         {products?.map(product => (
                             <MilkteaCard
-                                key={product.milkteaId}
+                                key={product.id}
                                 product={product}
                                 handleClick={() => {
                                     setSelectedProduct(product)

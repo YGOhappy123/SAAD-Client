@@ -1,5 +1,5 @@
 export interface IUser {
-    userId: number
+    id: number
     firstName: string
     lastName: string
     role: IRole
@@ -10,14 +10,12 @@ export interface IUser {
     phoneNumber?: string
     avatar?: string
 
-    gender?: 'Male' | 'Female'
-    hireDate?: string
-    monthlySalary?: number
-    createdBy?: number | string | null
+    createdById?: number | string | null
+    createdBy?: IAdmin | null
 }
 
 export interface ICustomer {
-    userId: number
+    id: number
     firstName: string
     lastName: string
     createdAt: string
@@ -51,15 +49,15 @@ export interface IStaff {
 }
 
 export interface IAdmin {
-    adminId: number
+    id: number
     firstName: string
     lastName: string
     createdAt: string
 
     email: string
     avatar?: string
-    gender: 'Male' | 'Female'
-    createdBy?: number | string | null
+    createdBy?: IAdmin | null
+    createdById?: number | string | null
 }
 
-export type IRole = 'User' | 'Staff' | 'Admin'
+export type IRole = 'Customer' | 'Admin'

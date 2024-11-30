@@ -25,11 +25,21 @@ const MyOrdersPage = () => {
 
     const [activeStatus, setActiveStatus] = useState<OrderStatus | ''>('')
     const [sortOption, setSortOption] = useState('')
+    const DEFAULT_SORT_OPTIONS = { createdAt: 'DESC' }
     const [openModal, setOpenModal] = useState<boolean>(false)
     const [activeOrder, setActiveOrder] = useState<IOrder | null>(null)
 
     const fetchOrdersQuery = useQuery(['my-orders', sortOption], {
-        queryFn: () => axios.get<IResponseData<IOrder[]>>(`/orders/my-orders?sort=${sortOption}`),
+        queryFn: () =>
+            axios.get<IResponseData<IOrder[]>>(
+                `/orders/my-orders?sort=${JSON.stringify(
+                    sortOption
+                        ? {
+                              [sortOption]: 'ASC'
+                          }
+                        : DEFAULT_SORT_OPTIONS
+                )}`
+            ),
         enabled: true,
         refetchIntervalInBackground: true,
         refetchInterval: 5 * 60 * 1000,
@@ -118,9 +128,9 @@ const MyOrdersPage = () => {
                                                 />
                                             )
                                         }}
-                                        rowKey={(record: IOrder) => record.orderId}
+                                        rowKey={(record: IOrder) => record.id}
                                         columns={[
-                                            { title: t('order ID'), dataIndex: 'orderId', width: 150 },
+                                            { title: t('order ID'), dataIndex: 'id', width: 120 },
                                             {
                                                 title: t('order date'),
                                                 dataIndex: 'createdAt',

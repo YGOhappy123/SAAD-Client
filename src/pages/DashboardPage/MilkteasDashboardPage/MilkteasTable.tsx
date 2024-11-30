@@ -34,16 +34,16 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
     const locale = getI18n().resolvedLanguage as 'vi' | 'en'
     const user = useSelector((state: RootState) => state.auth.user)
 
-    const onDeleteBtnClick = (productId: number, isHidden: boolean) => {
+    const onDeleteBtnClick = (productId: number, isActive: boolean) => {
         if (user.role !== 'Admin') return
-        const title = isHidden
+        const title = isActive
             ? `${t('are you sure that you want to show this product')}?`
             : `${t('are you sure that you want to hide this product')}? ${t("all customers' cart items related to this product would be deleted")}!`
 
         Modal.confirm({
             icon: <ExclamationCircleFilled />,
             title: title,
-            okText: isHidden ? t('show in menu') : t('hide from menu'),
+            okText: isActive ? t('show in menu') : t('hide from menu'),
             cancelText: t('cancel'),
             onOk: () => {
                 onDelete(productId)
@@ -235,24 +235,24 @@ const ProductsTable: React.FC<ProductsTableProps> = ({
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
                                     <Button
                                         onClick={() => {
-                                            if (record.isHidden) return
+                                            if (record.isActive) return
                                             onUpdateBtnClick(record)
                                         }}
                                         shape="round"
                                         type="primary"
-                                        disabled={record.isHidden}
+                                        disabled={record.isActive}
                                     >
                                         {t('update')}
                                     </Button>
                                     <Button
-                                        onClick={() => onDeleteBtnClick(record.milkteaId as number, record.isHidden)}
+                                        onClick={() => onDeleteBtnClick(record.milkteaId as number, record.isActive)}
                                         type="text"
                                         shape="round"
                                         danger
                                         style={{ border: '1px solid' }}
                                         disabled={user.role !== 'Admin'}
                                     >
-                                        {record.isHidden ? t('show in menu') : t('hide from menu')}
+                                        {record.isActive ? t('show in menu') : t('hide from menu')}
                                     </Button>
                                 </div>
                             )

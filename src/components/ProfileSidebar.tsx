@@ -12,7 +12,7 @@ import '../assets/styles/components/ProfileSidebar.css'
 
 const TABS = [
     { label: 'account details', to: '/profile/edit' },
-    { label: 'my orders', to: '/profile/orders', role: ['User'] },
+    { label: 'my orders', to: '/profile/orders', role: ['Customer'] },
     { label: 'change avatar', to: '/profile/change-avatar' },
     { label: 'change password', to: '/profile/change-password' }
 ]
@@ -101,14 +101,14 @@ const ProfileSidebar: FC = () => {
                     )
                 })}
 
-                {user.role === 'User' && (
+                {
                     <>
                         <Divider style={{ margin: '18px 0 9px', borderColor: 'rgba(255, 255, 255, 0.5)' }} />
                         <div className="profile-tab-item danger" onClick={onDeleteAccountBtnClick}>
                             {t('lock my account')}
                         </div>
                     </>
-                )}
+                }
             </div>
         </div>
     )

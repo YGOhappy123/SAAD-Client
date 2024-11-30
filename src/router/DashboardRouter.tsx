@@ -18,7 +18,7 @@ const dashboardRouter = [
         path: '/dashboard',
         element: (
             <Suspense>
-                <AuthProtector children={<DashboardLayout />} redirect="/auth" allowedRoles={['Admin', 'Staff']} />
+                <AuthProtector children={<DashboardLayout />} redirect="/auth" allowedRoles={['Admin']} />
             </Suspense>
         ),
         errorElement: <ErrorPage />,

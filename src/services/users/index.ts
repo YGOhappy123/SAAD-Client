@@ -101,7 +101,7 @@ export default ({ enabledFetchUsers }: { enabledFetchUsers?: boolean }) => {
     })
 
     const updateProfileMutation = useMutation({
-        mutationFn: ({ data }: { data: Partial<ICustomer> }) => axios.patch<IResponseData<any>>(`/users/profile`, data),
+        mutationFn: ({ data }: { data: Partial<ICustomer> }) => axios.patch<IResponseData<any>>(`/customers/profile`, data),
         onSuccess: res => {
             toast(t(res.data.message), toastConfig('success'))
         },

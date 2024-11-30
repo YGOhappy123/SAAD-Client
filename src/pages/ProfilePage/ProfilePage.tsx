@@ -33,14 +33,17 @@ const ProfilePage = () => {
             lastName: user.lastName,
             email: user.email,
             phoneNumber: user?.phoneNumber,
-            address: user?.address,
-            gender: user?.gender
+            address: user?.address
         })
     }
 
     const formRef = useRef<FormInstance>(null)
     const onFinish = (values: any) => {
-        if (user.role === 'User') {
+        if (user.role === 'Admin') {
+            delete values.email
+        }
+
+        if (user.role === 'Customer') {
             updateProfileMutation
                 .mutateAsync({ data: values })
                 .then(() => {
@@ -49,7 +52,7 @@ const ProfilePage = () => {
                 .catch(() => setFormDefaultValues())
         } else {
             updateAdminMutation
-                .mutateAsync({ adminId: user.userId, data: values })
+                .mutateAsync({ data: values })
                 .then(() => {
                     dispatch(setUser({ ...user, ...values }))
                 })
@@ -84,16 +87,10 @@ const ProfilePage = () => {
                                     { whitespace: true, message: t('required').toString() }
                                 ]}
                             >
-                                <Input
-                                    size="large"
-                                    spellCheck={false}
-                                    placeholder={t('last name...').toString()}
-                                    style={inputStyle}
-                                    disabled={user.role === 'Staff'}
-                                />
+                                <Input size="large" spellCheck={false} placeholder={t('last name...').toString()} style={inputStyle} />
                             </Form.Item>
 
-                            {(user.role === 'Staff' || user.role === 'User') && (
+                            {
                                 <Form.Item
                                     name="phoneNumber"
                                     rules={[
@@ -105,31 +102,15 @@ const ProfilePage = () => {
                                 >
                                     <Input size="large" placeholder={t('phone number...').toString()} style={inputStyle} />
                                 </Form.Item>
-                            )}
+                            }
 
-                            <Form.Item
-                                name="email"
-                                rules={[
-                                    { required: true, message: t('please enter your email').toString() },
-                                    { whitespace: true, message: t('please enter your email').toString() },
-                                    { type: 'email', message: t('invalid email address').toString() }
-                                ]}
-                            >
-                                <Input size="large" spellCheck={false} placeholder="Email..." style={inputStyle} />
+                            <Form.Item name="email" rules={[{ type: 'email', message: t('invalid email address').toString() }]}>
+                                <Input size="large" spellCheck={false} placeholder="Email..." style={inputStyle} disabled={user.role === 'Admin'} />
                             </Form.Item>
 
-                            {(user.role === 'Staff' || user.role === 'User') && (
+                            {user.role === 'Customer' && (
                                 <Form.Item name="address">
                                     <Input size="large" spellCheck={false} placeholder={t('address...').toString()} style={inputStyle} />
-                                </Form.Item>
-                            )}
-
-                            {(user.role === 'Staff' || user.role === 'Admin') && (
-                                <Form.Item name="gender" initialValue={'Male'}>
-                                    <Select size="large" style={{ height: 50 }}>
-                                        <Select.Option value="Male">{t('male')}</Select.Option>
-                                        <Select.Option value="Female">{t('female')}</Select.Option>
-                                    </Select>
                                 </Form.Item>
                             )}
 

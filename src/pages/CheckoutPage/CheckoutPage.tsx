@@ -65,9 +65,9 @@ const CheckoutPage = () => {
             .filter((item: ICartItem) => item.milktea?.isAvailable)
             .map((item: ICartItem) => ({
                 milkteaId: item.milkteaId,
-                sizeId: item.sizeId,
+                size: item.size,
                 quantity: item.quantity,
-                toppings: (item.toppings as ITopping[]).map((tp: ITopping) => tp.toppingId as number)
+                toppings: (item.toppings as ITopping[]).map((tp: ITopping) => tp.id as number)
             }))
 
         Modal.confirm({
@@ -205,7 +205,7 @@ const CheckoutPage = () => {
                                     {detailedItems
                                         .filter((item: ICartItem) => item.milktea?.isAvailable)
                                         .map((item: ICartItem) => (
-                                            <div key={item.cartItemId} className="checkout-cart-item">
+                                            <div key={item.id} className="checkout-cart-item">
                                                 <Badge count={item.quantity} color="rgba(115, 115, 115, 0.9)">
                                                     <div className="item-image">
                                                         <div className="img-wrapper">
@@ -216,7 +216,7 @@ const CheckoutPage = () => {
                                                 <div className="item-name">
                                                     <h4 style={{ margin: '0 0 8px', fontWeight: 700 }}>
                                                         {locale === 'vi' ? item.milktea?.nameVi : item.milktea?.nameEn}
-                                                        {` (${item.sizeId})`}
+                                                        {` (${item.size})`}
                                                     </h4>
                                                     <span style={{ marginBottom: 4 }}>
                                                         Topping:{' '}

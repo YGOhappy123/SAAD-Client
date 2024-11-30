@@ -85,7 +85,7 @@ const CartDrawer = ({ isCartOpen, setIsCartOpen }: IProps) => {
                     <>
                         <div className="cart-items">
                             {detailedItems.map((item: ICartItem) => (
-                                <div key={item.cartItemId} className={`cart-item ${item.quantity === 0 ? 'unavailable' : ''}`}>
+                                <div key={item.id} className={`cart-item ${item.quantity === 0 ? 'unavailable' : ''}`}>
                                     <div className="item-image">
                                         {item.milktea?.image ? (
                                             <Image src={item.milktea?.image} />
@@ -101,7 +101,7 @@ const CartDrawer = ({ isCartOpen, setIsCartOpen }: IProps) => {
                                                 navigate(`/product/${item.milkteaId}`)
                                             }}
                                         >
-                                            {locale === 'vi' ? item.milktea?.nameVi : item.milktea?.nameEn} ({item.sizeId})
+                                            {locale === 'vi' ? item.milktea?.nameVi : item.milktea?.nameEn} ({item.size})
                                         </h4>
                                         <p className="item-toppings">
                                             Topping:{' '}
@@ -129,9 +129,9 @@ const CartDrawer = ({ isCartOpen, setIsCartOpen }: IProps) => {
                                             onChange={newValue => {
                                                 const quantity = newValue - item.quantity
                                                 if (quantity === 0) return
-                                                if (newValue === 0) return removeCartItemMutation.mutate({ cartItemId: item.cartItemId })
+                                                if (newValue === 0) return removeCartItemMutation.mutate({ cartItemId: item.id })
                                                 return updateCartItemMutation.mutate({
-                                                    cartItemId: item.cartItemId,
+                                                    cartItemId: item.id,
                                                     quantity: Math.abs(quantity),
                                                     type: quantity > 0 ? 'increase' : 'decrease'
                                                 })
@@ -144,7 +144,7 @@ const CartDrawer = ({ isCartOpen, setIsCartOpen }: IProps) => {
                                                 shape="circle"
                                                 loading={removeCartItemMutation.isLoading}
                                                 icon={<DeleteOutlined />}
-                                                onClick={() => removeCartItemMutation.mutate({ cartItemId: item.cartItemId })}
+                                                onClick={() => removeCartItemMutation.mutate({ cartItemId: item.id })}
                                             />
                                         </Tooltip>
                                     </div>

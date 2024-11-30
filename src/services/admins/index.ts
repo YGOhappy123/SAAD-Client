@@ -75,8 +75,7 @@ export default ({ enabledFetchAdmins }: { enabledFetchAdmins?: boolean }) => {
     }, [current, itemPerPage])
 
     const updateAdminMutation = useMutation({
-        mutationFn: ({ adminId, data }: { adminId: number; data: Partial<IAdmin> }) =>
-            axios.patch<IResponseData<any>>(`/manage/admins/${adminId}`, data),
+        mutationFn: ({ data }: { data: Partial<IAdmin> }) => axios.patch<IResponseData<any>>(`/admins/profile`, data),
         onSuccess: res => {
             if (isSearching) {
                 queryClient.invalidateQueries('search-admins')

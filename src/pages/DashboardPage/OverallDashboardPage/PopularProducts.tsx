@@ -132,10 +132,10 @@ export default function PopularProducts({ data, title, isLoading }: PopularProdu
                     },
                     {
                         title: t('is hidden from menu') + '?',
-                        dataIndex: 'isHidden',
+                        dataIndex: 'isActive',
                         align: 'center',
-                        key: 'isHidden',
-                        render: isHidden => <div>{isHidden ? t('yes') : t('no')}</div>
+                        key: 'isActive',
+                        render: isActive => <div>{isActive ? t('yes') : t('no')}</div>
                     }
                 ]}
                 dataSource={data}

@@ -29,15 +29,15 @@ const ProductPage = () => {
     const [openAddToCartModal, setOpenAddToCartModal] = useState(false)
 
     const getProductQuery = useQuery(['product', productId], {
-        queryFn: () => axios.get<IResponseData<IMilktea>>(`/product/milktea/${productId}`),
+        queryFn: () => axios.get<IResponseData<IMilktea>>(`/products/milkteas/${productId}`),
         select: res => res.data,
         retry: 1,
         enabled: true,
         refetchOnWindowFocus: false
     })
     const product = getProductQuery.data?.data as IMilktea
-    const minPrice = !product ? 0 : ((product.price?.S ?? product.price?.M ?? product.price?.L) as number)
-    const maxPrice = !product ? 0 : ((product.price?.L ?? product.price?.M ?? product.price?.S) as number)
+    const minPrice = !product ? 0 : ((product.price?.s ?? product.price?.m ?? product.price?.l) as number)
+    const maxPrice = !product ? 0 : ((product.price?.l ?? product.price?.m ?? product.price?.s) as number)
 
     return (
         <div className="product-page">
@@ -122,7 +122,7 @@ const ProductPage = () => {
                                                 ` - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(maxPrice)}`}
                                         </div>
                                         <Space align="center" size={15} style={{ marginTop: 30 }}>
-                                            {(!user || user.role === 'User') && (
+                                            {(!user || user.role === 'Customer') && (
                                                 <>
                                                     {product.isAvailable ? (
                                                         <Button onClick={() => setOpenAddToCartModal(true)} className="product-atc-btn">

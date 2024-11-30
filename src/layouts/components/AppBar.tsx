@@ -138,7 +138,7 @@ const AppBar: FC<IProps> = ({ isDashboard }) => {
                         </Tooltip>
                     )}
 
-                    {user && user.role === 'User' && (
+                    {user && user.role === 'Customer' && (
                         <>
                             <Tooltip title={t('cart')}>
                                 <Badge count={detailedItems.length}>
@@ -150,7 +150,7 @@ const AppBar: FC<IProps> = ({ isDashboard }) => {
                     )}
 
                     {user && (
-                        <Dropdown menu={{ items: user.role === 'User' ? customerItems : adminItems }} placement="bottom" arrow>
+                        <Dropdown menu={{ items: user.role === 'Customer' ? customerItems : adminItems }} placement="bottom" arrow>
                             <img src={user.avatar} className="user-avatar" onClick={() => navigate('/profile/edit')} />
                         </Dropdown>
                     )}
