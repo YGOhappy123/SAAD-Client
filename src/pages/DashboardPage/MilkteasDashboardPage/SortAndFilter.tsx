@@ -68,9 +68,9 @@ export default function SortAndFilter({ onChange, onSearch, onReset, categories 
     const categoryOptions: SelectProps['options'] = useMemo(() => {
         if (!categories?.length) return [{ key: 'empty', label: <Empty />, disabled: true }]
         return categories.map(category => ({
-            key: category.categoryId,
+            key: category.id,
             label: locale === 'vi' ? category.nameVi : category.nameEn,
-            value: category.categoryId
+            value: category.id
         }))
     }, [categories])
 

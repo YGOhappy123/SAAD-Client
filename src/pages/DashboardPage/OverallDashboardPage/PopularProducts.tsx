@@ -24,7 +24,7 @@ export default function PopularProducts({ data, title, isLoading }: PopularProdu
             <Table
                 size="small"
                 style={{ width: '100%' }}
-                rowKey={(record: MilkteaSale) => record.milkteaId as number}
+                rowKey={(record: MilkteaSale) => record.id as number}
                 loading={isLoading}
                 columns={[
                     {

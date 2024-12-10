@@ -30,12 +30,12 @@ export default function PopularUsers({ highlightField, highlightFieldDisplay, ty
             <Table
                 size="small"
                 style={{ width: '100%' }}
-                rowKey={(record: CustomerTotalSpending | Partial<ICustomer>) => record.userId as number}
+                rowKey={(record: CustomerTotalSpending | Partial<ICustomer>) => record.id as number}
                 loading={isLoading}
                 columns={[
                     {
                         title: t('id') + ' ' + t('customer').toLocaleLowerCase(),
-                        dataIndex: 'userId',
+                        dataIndex: 'id',
                         key: 'id',
                         render: text => (
                             <span>
